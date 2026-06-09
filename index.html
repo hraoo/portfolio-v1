@@ -1,1822 +1,773 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haard Rao | Systems Engineer & AI Specialist</title>
-    <meta name="description" content="Impact-driven software and systems engineer specializing in cloud, AI, embedded systems, and distributed environments.">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #00ffff;
-            --secondary-color: #ff00ff;
-            --accent-color: #00ff88;
-            --bg-dark: #0a0a0f;
-            --bg-darker: #050508;
-            --text-light: #e0e0e0;
-            --text-muted: #888;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-darker);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--primary-color);
-            border-top: 3px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Canvas Background */
-        #canvas-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--primary-color);
-            transition: all 0.3s ease;
-        }
-
-        /* Sections */
-        section {
-            min-height: 100vh;
-            padding: 6rem 2rem 2rem;
-            position: relative;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Hero Section */
-        #home {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .hero-content {
-            z-index: 1;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .hero-description {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            line-height: 1.8;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: 2px solid var(--primary-color);
-            background: transparent;
-            color: var(--primary-color);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border-radius: 5px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-color);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 0;
-        }
-
-        .btn:hover {
-            color: var(--bg-dark);
-        }
-
-        .btn-secondary {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        .btn-secondary::before {
-            background: var(--secondary-color);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-
-        /* About Section */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .skill-category:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
-        }
-
-        .skill-category h3 {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .skill-icon {
-            font-size: 1.8rem;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .skill-tag {
-            background: rgba(0, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .skill-tag:hover {
-            background: rgba(0, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        /* Experience Section */
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .timeline-item {
-            margin-bottom: 3rem;
-            position: relative;
-            width: 45%;
-        }
-
-        .timeline-item:nth-child(odd) {
-            margin-left: 0;
-        }
-
-        .timeline-item:nth-child(even) {
-            margin-left: 55%;
-        }
-
-        .timeline-content {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
-        }
-
-        .timeline-date {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-        }
-
-        .timeline-company {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .timeline-description {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .timeline-description ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .timeline-description li {
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .timeline-description li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: var(--primary-color);
-        }
-
-        .timeline-dot {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            top: 2rem;
-            box-shadow: 0 0 20px var(--primary-color);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-dot {
-            right: -10px;
-        }
-
-        .timeline-item:nth-child(even) .timeline-dot {
-            left: -10px;
-        }
-
-        /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--secondary-color);
-            box-shadow: 0 15px 40px rgba(255, 0, 255, 0.3);
-        }
-
-        .project-header {
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
-        }
-
-        .project-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-        }
-
-        .project-date {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .project-body {
-            padding: 2rem;
-        }
-
-        .project-description {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .project-description ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .project-description li {
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .project-description li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .tech-tag {
-            background: rgba(255, 0, 255, 0.1);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            border: 1px solid rgba(255, 0, 255, 0.2);
-        }
-
-        /* Publications Section */
-        .publications-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-        }
-
-        .publication-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .publication-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-color);
-            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
-        }
-
-        .publication-header {
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 255, 0.1));
-        }
-
-        .publication-title {
-            font-size: 1.5rem;
-            line-height: 1.4;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        .publication-body {
-            padding: 2rem;
-        }
-
-        .publication-venue {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(0, 255, 136, 0.05);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 136, 0.1);
-        }
-
-        .venue-icon {
-            font-size: 1.5rem;
-        }
-
-        .venue-name {
-            color: var(--accent-color);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .venue-status {
-            margin-left: auto;
-            background: var(--accent-color);
-            color: var(--bg-dark);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .publication-description {
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .publication-keywords {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .keyword-tag {
-            background: rgba(0, 255, 136, 0.1);
-            padding: 0.4rem 0.9rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            color: var(--accent-color);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .keyword-tag:hover {
-            background: rgba(0, 255, 136, 0.2);
-            transform: scale(1.05);
-        }
-
-        /* Contact Section */
-        #contact {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .contact-info h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .contact-info p {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--text-muted);
-        }
-
-        .contact-icon {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: var(--primary-color);
-            color: var(--bg-dark);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .social-link svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .contact-form {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 5px;
-            color: var(--text-light);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 11000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: var(--bg-dark);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid var(--primary-color);
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 255, 255, 0.3);
-        }
-
-        .modal-content h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .modal-content p {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        footer p {
-            color: var(--text-muted);
-        }
-
-        /* Scroll to Top */
-        .scroll-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 9000;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.5);
-        }
-
-        .scroll-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.7);
-        }
-
-        .scroll-top::before {
-            content: '↑';
-            font-size: 1.5rem;
-            color: var(--bg-dark);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 968px) {
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .about-content,
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .timeline::before {
-                left: 0;
-            }
-
-            .timeline-item {
-                width: 100%;
-                margin-left: 2rem !important;
-            }
-
-            .timeline-item:nth-child(odd) .timeline-dot,
-            .timeline-item:nth-child(even) .timeline-dot {
-                left: -10px;
-            }
-
-            .skills-grid,
-            .projects-grid,
-            .publications-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav ul {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(10, 10, 15, 0.98);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                transition: left 0.3s ease;
-            }
-
-            nav ul.active {
-                left: 0;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .hero-description {
-                font-size: 1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Lazy Load Animation */
-        .lazy-load {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .lazy-load.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 3D Scroll Animations */
-        .scroll-3d {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .depth-layer-1 {
-            transform: translateZ(50px);
-        }
-
-        .depth-layer-2 {
-            transform: translateZ(100px);
-        }
-
-        .depth-layer-3 {
-            transform: translateZ(150px);
-        }
-
-        .parallax-section {
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease-out;
-        }
-
-        /* Floating animation for cards */
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotateX(0deg);
-            }
-            50% {
-                transform: translateY(-10px) rotateX(2deg);
-            }
-        }
-
-        .skill-category:hover,
-        .project-card:hover,
-        .stat-card:hover {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        /* 3D Flip effect on timeline items */
-        .timeline-content {
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-        }
-
-        .timeline-item:hover .timeline-content {
-            transform: rotateY(5deg) translateZ(20px);
-        }
-
-        .timeline-item:nth-child(even):hover .timeline-content {
-            transform: rotateY(-5deg) translateZ(20px);
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Haard Rao — Neural Systems Engineer</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Lucide -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+  :root{
+    --bg:#000000;
+    --fg:#f5f5f7;
+    --muted:#86868b;
+    --accent:#0a84ff;
+    --glass:rgba(255,255,255,0.04);
+    --border:rgba(255,255,255,0.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);}
+  body{font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  h1,h2,h3{font-weight:700;letter-spacing:-0.03em;}
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* Lenis */
+  html.lenis,html.lenis body{height:auto;}
+  .lenis.lenis-smooth{scroll-behavior:auto !important;}
+
+  /* Canvas */
+  #webgl{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  #content{position:relative;z-index:2;}
+
+  /* Glass */
+  .glass{
+    background:var(--glass);
+    backdrop-filter:blur(24px) saturate(200%);
+    -webkit-backdrop-filter:blur(24px) saturate(200%);
+    border:1px solid var(--border);
+    border-radius:22px;
+  }
+  .glass:hover{border-color:rgba(255,255,255,0.22);}
+
+  /* HUD */
+  #hud{position:fixed;top:0;left:0;right:0;z-index:40;}
+  .hud-bar{
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(20px) saturate(180%);
+    -webkit-backdrop-filter:blur(20px) saturate(180%);
+    border-bottom:1px solid var(--border);
+  }
+  #scrollFill{height:1px;background:linear-gradient(90deg,var(--accent),#64d2ff);width:0%;}
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* Expandable card */
+  .card-body{max-height:0;overflow:hidden;transition:max-height .7s cubic-bezier(.16,1,.3,1),opacity .5s ease;opacity:0;}
+  .card.open .card-body{max-height:1400px;opacity:1;}
+  .card .chev{transition:transform .5s cubic-bezier(.16,1,.3,1);}
+  .card.open .chev{transform:rotate(180deg);}
+
+  /* Timeline */
+  .tl-line{position:absolute;left:7px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--border) 8%,var(--border) 92%,transparent);}
+  .tl-dot{position:absolute;left:0;top:6px;width:15px;height:15px;border-radius:50%;background:#000;border:1px solid var(--accent);box-shadow:0 0 14px rgba(10,132,255,.6);}
+
+  /* Terminal */
+  #terminal{position:fixed;inset:0;z-index:60;display:none;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);}
+  #terminal.on{display:flex;}
+  .term-win{background:rgba(10,10,12,0.92);border:1px solid var(--border);}
+  #termOut{white-space:pre-wrap;}
+  #termIn{background:transparent;border:none;outline:none;color:var(--fg);width:100%;}
+
+  /* Mobile shader fallback */
+  #cssfallback{
+    position:fixed;inset:0;z-index:1;display:none;
+    background:
+      radial-gradient(circle at 30% 20%,rgba(10,132,255,.25),transparent 40%),
+      radial-gradient(circle at 70% 70%,rgba(100,210,255,.18),transparent 45%),
+      radial-gradient(circle at 50% 50%,rgba(120,80,255,.12),transparent 55%),
+      #000;
+    background-size:200% 200%;
+    animation:flow 18s ease infinite;
+  }
+  @keyframes flow{0%{background-position:0 0}50%{background-position:100% 100%}100%{background-position:0 0}}
+
+  .tag{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--muted);}
+  .grad-text{background:linear-gradient(180deg,#fff,#a1a1a6);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  a{color:inherit;}
+</style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
+
+<!-- WebGL + fallback -->
+<div id="cssfallback"></div>
+<canvas id="webgl"></canvas>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-bar px-4 sm:px-8 py-3 flex items-center justify-between mono text-xs">
+    <div class="flex items-center gap-3">
+      <span class="w-2 h-2 rounded-full bg-[#0a84ff] inline-block animate-pulse"></span>
+      <span class="text-white">HAARD.RAO</span>
+      <span class="text-[var(--muted)] hidden sm:inline">// NEURAL_SYSTEMS_ENGINEER</span>
     </div>
-
-    <!-- Canvas Background -->
-    <canvas id="canvas-bg"></canvas>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <div class="logo">HR</div>
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul id="nav-menu">
-                <li><a href="#home" onclick="closeMenu()">Home</a></li>
-                <li><a href="#about" onclick="closeMenu()">About</a></li>
-                <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
-                <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
-                <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
-                <li><a href="#publications" onclick="closeMenu()">Publications</a></li>
-                <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home">
-        <div class="hero-content">
-            <h1 class="hero-title">Haard Rao</h1>
-            <p class="hero-subtitle">Systems Engineer | AI Specialist | Cloud Architect | Data Analyst | Software & Web Developer</p>
-            <p class="hero-description">
-                Impact-driven software and systems engineer trusted to design, stabilize, and scale mission-critical technology across cloud, AI, embedded, and distributed environments. Full-stack developer specializing in building scalable web applications, RESTful APIs, and responsive user interfaces using modern frameworks and best practices. Expert in transforming raw data into actionable insights through advanced analytics, machine learning, and statistical modeling. Consistently delivers measurable performance gains, risk reduction, and operational clarity in systems where failure is expensive and ambiguity is constant.
-            </p>
-            <div class="cta-buttons">
-                <a href="#contact" class="btn">Get In Touch</a>
-                <a href="#projects" class="btn btn-secondary">View Projects</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" style="padding-top: 10rem; padding-bottom: 6rem;">
-        <div class="container scroll-3d">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-subtitle">Transforming Complex Challenges into Elegant Solutions</p>
-            </div>
-            <div class="about-content">
-                <div class="about-text lazy-load">
-                    <h3>Engineering Excellence Across Industries</h3>
-                    <p>
-                        Currently at Ford as a Software Engineer, I neutralize 2,500+ high-severity vehicle software escalations monthly, cutting engineering dependency by 30% through systematic fault isolation and cross-module diagnostics.
-                    </p>
-                    <p>
-                        As a full-stack software and web developer, I architect and build scalable applications using modern technologies like React, Angular, Node.js, and .NET Core. My development expertise spans responsive frontend design, RESTful API development, microservices architecture, and cloud-native solutions. I've delivered platforms achieving 45% performance improvements, modernized legacy systems cutting load times by 25%, and built real-time applications serving thousands of concurrent users.
-                    </p>
-                    <p>
-                        My expertise spans automotive systems, cloud architecture, AI/ML deployment, full-stack development, and advanced data analytics. I've delivered real-time pronunciation engines with 95% accuracy, vehicular intrusion detection systems reducing cyber-attack exposure by 40%, and mission-critical platforms with exceptional performance and reliability.
-                    </p>
-                    <p>
-                        As a data analyst, I transform complex datasets into strategic insights using Python, SQL, and advanced statistical techniques. My work includes predictive modeling, pattern recognition, A/B testing, and building interactive dashboards that drive data-informed decision-making. I've leveraged tools like Pandas, NumPy, Tableau, and PowerBI to uncover trends, optimize processes, and deliver measurable business value.
-                    </p>
-                    <p>
-                        With a Master's in Computer Engineering from the University of Michigan and proven experience across healthcare, e-commerce, and automotive domains, I bring versatile technical leadership that translates business challenges into measurable outcomes.
-                    </p>
-                </div>
-                <div class="stats-grid lazy-load">
-                    <div class="stat-card">
-                        <div class="stat-number">2,500+</div>
-                        <div class="stat-label">Monthly Escalations Resolved</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">45%</div>
-                        <div class="stat-label">Performance Improvement</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">40%</div>
-                        <div class="stat-label">Cyber-Attack Reduction</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">98%</div>
-                        <div class="stat-label">Stakeholder Satisfaction</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="parallax-section" style="padding-top: 8rem; padding-bottom: 6rem;">
-        <div class="container scroll-3d">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">Technical Arsenal</h2>
-                <p class="section-subtitle">Comprehensive Skill Set Across Multiple Domains</p>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">💻</span> Programming & Systems</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">C/C++</span>
-                        <span class="skill-tag">C#</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">Bash</span>
-                        <span class="skill-tag">MATLAB</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">🚀</span> Frameworks & Tools</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">React.js</span>
-                        <span class="skill-tag">Angular</span>
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">.NET Core</span>
-                        <span class="skill-tag">Django</span>
-                        <span class="skill-tag">Flask</span>
-                        <span class="skill-tag">Express.js</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">☁️</span> Cloud & DevOps</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">GCP</span>
-                        <span class="skill-tag">Azure</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Kubernetes</span>
-                        <span class="skill-tag">Jenkins</span>
-                        <span class="skill-tag">CI/CD</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">🗄️</span> Databases</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">PostgreSQL</span>
-                        <span class="skill-tag">MySQL</span>
-                        <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">Redis</span>
-                        <span class="skill-tag">DynamoDB</span>
-                        <span class="skill-tag">BigQuery</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">🤖</span> AI/ML & Data Science</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">PyTorch</span>
-                        <span class="skill-tag">TensorFlow</span>
-                        <span class="skill-tag">Scikit-learn</span>
-                        <span class="skill-tag">Deep Learning</span>
-                        <span class="skill-tag">NLP</span>
-                        <span class="skill-tag">Computer Vision</span>
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">NumPy</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">🔧</span> Embedded & Automotive</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Embedded C</span>
-                        <span class="skill-tag">ARM</span>
-                        <span class="skill-tag">Arduino</span>
-                        <span class="skill-tag">CAN Bus</span>
-                        <span class="skill-tag">ECU Diagnostics</span>
-                        <span class="skill-tag">Raspberry Pi</span>
-                        <span class="skill-tag">VHDL</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">📊</span> Data Analysis & Visualization</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">NumPy</span>
-                        <span class="skill-tag">Tableau</span>
-                        <span class="skill-tag">Power BI</span>
-                        <span class="skill-tag">Matplotlib</span>
-                        <span class="skill-tag">Seaborn</span>
-                        <span class="skill-tag">Plotly</span>
-                        <span class="skill-tag">Excel</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">📈</span> Statistical Analysis & Methods</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Statistical Modeling</span>
-                        <span class="skill-tag">A/B Testing</span>
-                        <span class="skill-tag">Hypothesis Testing</span>
-                        <span class="skill-tag">Regression Analysis</span>
-                        <span class="skill-tag">Time Series</span>
-                        <span class="skill-tag">Forecasting</span>
-                        <span class="skill-tag">Feature Engineering</span>
-                    </div>
-                </div>
-                <div class="skill-category lazy-load">
-                    <h3><span class="skill-icon">⚙️</span> Engineering Practices</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Agile/Scrum</span>
-                        <span class="skill-tag">System Design</span>
-                        <span class="skill-tag">Data Structures</span>
-                        <span class="skill-tag">Algorithms</span>
-                        <span class="skill-tag">Root Cause Analysis</span>
-                        <span class="skill-tag">Code Review</span>
-                        <span class="skill-tag">CI/CD</span>
-                        <span class="skill-tag">TDD</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="parallax-section" style="padding-top: 8rem; padding-bottom: 6rem;">
-        <div class="container scroll-3d">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">Professional Journey</h2>
-                <p class="section-subtitle">Building Impact-Driven Solutions</p>
-            </div>
-            <div class="timeline">
-                <div class="timeline-item lazy-load">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">June 2025 – Present</div>
-                        <h3 class="timeline-title">Software Engineer</h3>
-                        <div class="timeline-company">Ford Motor Company | Farmington, MI</div>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Neutralized 2,500+ high-severity vehicle software escalations monthly, cutting engineering dependency by 30%</li>
-                                <li>Compressed case resolution timelines 25% through CAN/CAN-FD signal analysis and diagnostic tooling</li>
-                                <li>Elevated fleet-wide repair accuracy 35% by validating ECU behavior across APIM, IPMA, TCU, and GWM teams</li>
-                                <li>Suppressed redundant escalations 20% through scalable remote diagnostics workflows</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item lazy-load">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">Jan 2025 – June 2025</div>
-                        <h3 class="timeline-title">Software Developer</h3>
-                        <div class="timeline-company">American Software LLC | Remote</div>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Architected modular Angular & .NET Core platform, driving 45% frontend performance improvement</li>
-                                <li>Expanded user engagement 30% through accessible, component-driven interface design</li>
-                                <li>Raised sprint throughput 25% by translating business requirements into Agile specifications</li>
-                                <li>Enabled 2× request throughput supporting 40% traffic growth via RESTful API optimization</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item lazy-load">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">Feb 2024 – Dec 2024</div>
-                        <h3 class="timeline-title">Software Engineer</h3>
-                        <div class="timeline-company">University of Michigan | Dearborn, MI</div>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Delivered real-time pronunciation engine achieving 147ms latency and 95% accuracy on GCP</li>
-                                <li>Reduced vehicular cyber-attack exposure 40% via Python-based intrusion detection system</li>
-                                <li>Engineered CAN-bus ECU testbench improving protocol validation effectiveness 23%</li>
-                                <li>Strengthened CAN-bus resilience 20% through ML-driven anomaly detection pipelines</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item lazy-load">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-date">Aug 2021 – Aug 2022</div>
-                        <h3 class="timeline-title">Frontend Developer</h3>
-                        <div class="timeline-company">Crystalvoxx Ltd. | Gujarat, India</div>
-                        <div class="timeline-description">
-                            <ul>
-                                <li>Modernized legacy EHR platform, cutting load time 25% and strengthening HIPAA compliance 35%</li>
-                                <li>Propelled organic traffic growth 50% through SEO-optimized product experiences</li>
-                                <li>Lifted conversion rates 20% via responsive, UX-driven layout re-engineering</li>
-                                <li>Sustained 98% stakeholder satisfaction through predictable delivery</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="parallax-section" style="padding-top: 8rem; padding-bottom: 8rem;">
-        <div class="container scroll-3d">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">Featured Projects</h2>
-                <p class="section-subtitle">Innovation Through Code</p>
-            </div>
-            <div class="projects-grid">
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">DeepCANvas</h3>
-                        <p class="project-date">Selected for IEEE IAVVC Germany</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Neural system for vehicle CAN data anomaly detection</li>
-                                <li>Reduced cyber-attack exposure by 40%</li>
-                                <li>Real-time intrusion detection with ML pipelines</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Scikit-learn</span>
-                            <span class="tech-tag">CAN Bus</span>
-                            <span class="tech-tag">Deep Learning</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">Real-Time Pronunciation Engine</h3>
-                        <p class="project-date">Feb 2024 – Dec 2024</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Achieved 147ms latency with 95% accuracy</li>
-                                <li>Deployed on GCP for live-event execution</li>
-                                <li>Production-grade speech recognition system</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">GCP</span>
-                            <span class="tech-tag">NLP</span>
-                            <span class="tech-tag">Speech Recognition</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">Stock Market Prediction System</h3>
-                        <p class="project-date">Jan 2023 – Apr 2023</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Hybrid CNN-LSTM model achieving 0.75 RMSE</li>
-                                <li>Integrated sentiment analysis from Twitter & news</li>
-                                <li>20% improvement in predictive accuracy</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Keras</span>
-                            <span class="tech-tag">LSTM</span>
-                            <span class="tech-tag">CNN</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">Cloud-Based Attendance Portal</h3>
-                        <p class="project-date">Jan 2023 – Apr 2023</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Facial recognition with 95% accuracy using OpenCV</li>
-                                <li>Scalable cloud-native infrastructure on GCP</li>
-                                <li>Real-time attendance logging with Firebase</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">OpenCV</span>
-                            <span class="tech-tag">GCP</span>
-                            <span class="tech-tag">Firebase</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">Multi-Lingual Text Summarizer</h3>
-                        <p class="project-date">Sept 2023 – Dec 2023</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Transformer-based summarizer using T5-small</li>
-                                <li>Supports Hindi, Gujarati, and Telugu</li>
-                                <li>30% reduction in reading time</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">HuggingFace</span>
-                            <span class="tech-tag">Transformers</span>
-                            <span class="tech-tag">NLP</span>
-                            <span class="tech-tag">Python</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card lazy-load">
-                    <div class="project-header">
-                        <h3 class="project-title">CultVerse - Social Commerce</h3>
-                        <p class="project-date">Sept 2023 – Dec 2023</p>
-                    </div>
-                    <div class="project-body">
-                        <div class="project-description">
-                            <ul>
-                                <li>Real-time platform boosting engagement 40%</li>
-                                <li>Recommendation engine increasing conversion 25%</li>
-                                <li>Built with React and Firebase</li>
-                            </ul>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Firebase</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">ML</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Publications Section -->
-    <section id="publications" class="parallax-section" style="padding-top: 10rem; padding-bottom: 8rem;">
-        <div class="container scroll-3d">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">Publications</h2>
-                <p class="section-subtitle">Research Contributions to the Field</p>
-            </div>
-            <div class="publications-grid">
-                <div class="publication-card lazy-load">
-                    <div class="publication-header">
-                        <h3 class="publication-title">DeepCANvas – Neural System for Vehicle CAN Data Anomaly Detection</h3>
-                    </div>
-                    <div class="publication-body">
-                        <div class="publication-venue">
-                            <span class="venue-icon">📄</span>
-                            <span class="venue-name">IEEE IAVVC Germany</span>
-                            <span class="venue-status">Selected</span>
-                        </div>
-                        <div class="publication-description">
-                            A novel neural network architecture for real-time anomaly detection in Controller Area Network (CAN) bus data, addressing critical cybersecurity challenges in modern vehicles. The system demonstrates 40% reduction in cyber-attack exposure through advanced machine learning pipelines and pattern recognition techniques.
-                        </div>
-                        <div class="publication-keywords">
-                            <span class="keyword-tag">CAN Bus Security</span>
-                            <span class="keyword-tag">Anomaly Detection</span>
-                            <span class="keyword-tag">Deep Learning</span>
-                            <span class="keyword-tag">Automotive Cybersecurity</span>
-                            <span class="keyword-tag">Neural Networks</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" style="padding-top: 10rem; padding-bottom: 6rem;">
-        <div class="container">
-            <div class="section-header lazy-load">
-                <h2 class="section-title">Let's Connect</h2>
-                <p class="section-subtitle">Ready to Transform Your Next Challenge</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info lazy-load">
-                    <h3>Get In Touch</h3>
-                    <p>
-                        I'm always interested in hearing about new opportunities, challenging projects, and innovative collaborations. Whether you're looking for engineering expertise, technical leadership, or want to discuss the latest in AI and systems architecture, feel free to reach out.
-                    </p>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <span class="contact-icon">📧</span>
-                            <span>haardrao23@gmail.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📱</span>
-                            <span>+1 (313) 478-2312</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">📍</span>
-                            <span>Pontiac, Michigan, USA</span>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/haardrao/" target="_blank" class="social-link" title="LinkedIn">in</a>
-                        <a href="https://github.com/hraoo" target="_blank" class="social-link" title="GitHub">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <form class="contact-form lazy-load" id="contact-form">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Haard Rao. Crafted with precision and passion.</p>
-    </footer>
-
-    <!-- Scroll to Top Button -->
-    <div class="scroll-top" id="scrollTop"></div>
-
-    <!-- Confirmation Modal -->
-    <div class="modal" id="confirmModal">
-        <div class="modal-content">
-            <h3>Confirm Submission</h3>
-            <p>Are you sure you want to send this message?</p>
-            <div class="modal-buttons">
-                <button class="btn" onclick="confirmSend()">Yes, Send</button>
-                <button class="btn btn-secondary" onclick="cancelSend()">Cancel</button>
-            </div>
-        </div>
+    <div class="flex items-center gap-4 sm:gap-6">
+      <span class="text-[var(--muted)] hidden sm:inline">FPS:<span id="fps" class="text-white">60</span></span>
+      <span class="text-[var(--muted)] hidden md:inline">PKTS:<span id="packets" class="text-white">0</span></span>
+      <span class="text-[var(--muted)]">SCROLL:<span id="scrollPct" class="text-white">0%</span></span>
+      <button id="termBtn" class="text-[#0a84ff] hover:text-white transition">[ TERMINAL ]</button>
     </div>
+  </div>
+  <div class="w-full h-px bg-transparent"><div id="scrollFill"></div></div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Variables
-        let scene, camera, renderer, particles;
-        let formData = null;
+<!-- Terminal -->
+<div id="terminal">
+  <div class="term-win glass w-[92%] max-w-3xl mx-auto my-auto p-5 mono text-sm rounded-2xl">
+    <div class="flex items-center justify-between mb-3 text-[var(--muted)]">
+      <span>haard@portfolio:~$ resume_query.sh</span>
+      <button id="termClose" class="hover:text-white">✕</button>
+    </div>
+    <div id="termOut" class="text-[#a1ffb0] mb-3 max-h-[50vh] overflow-y-auto leading-relaxed"></div>
+    <div class="flex gap-2 items-center">
+      <span class="text-[#0a84ff]">&gt;</span>
+      <input id="termIn" autocomplete="off" placeholder="type 'help'..." />
+    </div>
+  </div>
+</div>
 
-        // Initialize
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loading-screen').style.display = 'none';
-                }, 500);
-            }, 1000);
-        });
+<!-- CONTENT -->
+<main id="content">
 
-        // Three.js Background
-        function initThree() {
-            const canvas = document.getElementById('canvas-bg');
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+  <!-- HERO -->
+  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6">
+    <div class="reveal">
+      <p class="mono text-xs text-[var(--muted)] mb-5 tracking-[0.3em]">[ SYSTEM ONLINE • CORE INITIALIZED ]</p>
+      <h1 class="text-5xl sm:text-7xl md:text-8xl grad-text leading-none">Haard Rao</h1>
+      <p class="mt-6 text-lg sm:text-2xl text-[var(--muted)] font-light max-w-2xl mx-auto">
+        Software Engineer building at the intersection of
+        <span class="text-white">Embedded Systems</span>,
+        <span class="text-white">AI</span> &
+        <span class="text-white">Web</span>.
+      </p>
+      <div class="flex flex-wrap gap-3 justify-center mt-8 mono text-xs">
+        <a href="mailto:haardrao23@gmail.com" class="tag hover:text-white transition">haardrao23@gmail.com</a>
+        <span class="tag">+1 313 478 2312</span>
+        <span class="tag">LinkedIn</span>
+        <span class="tag">Portfolio</span>
+      </div>
+    </div>
+    <div class="absolute bottom-10 mono text-xs text-[var(--muted)] animate-bounce">SCROLL TO DISASSEMBLE ↓</div>
+  </section>
 
-            // Create particle system
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const colors = [];
+  <!-- ABOUT / STATS -->
+  <section class="max-w-6xl mx-auto px-6 py-28">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="statsGrid"></div>
+  </section>
 
-            for (let i = 0; i < 2500; i++) {
-                const x = (Math.random() - 0.5) * 2000;
-                const y = (Math.random() - 0.5) * 2000;
-                const z = (Math.random() - 0.5) * 2000;
-                vertices.push(x, y, z);
+  <!-- EXPERIENCE -->
+  <section class="max-w-5xl mx-auto px-6 py-20">
+    <div class="reveal mb-14">
+      <p class="mono text-xs text-[#0a84ff] mb-3">01 // EMBEDDED + SYSTEMS</p>
+      <h2 class="text-4xl sm:text-5xl grad-text">Professional Experience</h2>
+    </div>
+    <div class="relative pl-8" id="timeline">
+      <div class="tl-line"></div>
+    </div>
+  </section>
 
-                // Cyan, magenta, and green colors
-                const colorChoice = Math.random();
-                if (colorChoice < 0.33) {
-                    colors.push(0, 1, 1); // cyan
-                } else if (colorChoice < 0.66) {
-                    colors.push(1, 0, 1); // magenta
-                } else {
-                    colors.push(0, 1, 0.5); // green
-                }
-            }
+  <!-- PROJECTS BENTO -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="reveal mb-14">
+      <p class="mono text-xs text-[#0a84ff] mb-3">02 // AI + APPLICATIONS</p>
+      <h2 class="text-4xl sm:text-5xl grad-text">Project Experience</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="projectGrid"></div>
+  </section>
 
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  <!-- PUBLICATIONS -->
+  <section class="max-w-5xl mx-auto px-6 py-20">
+    <div class="reveal mb-10">
+      <p class="mono text-xs text-[#0a84ff] mb-3">03 // RESEARCH</p>
+      <h2 class="text-4xl sm:text-5xl grad-text">Publications</h2>
+    </div>
+    <div id="pubs" class="space-y-4"></div>
+  </section>
 
-            const material = new THREE.PointsMaterial({
-                size: 2,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending
-            });
+  <!-- EDUCATION -->
+  <section class="max-w-5xl mx-auto px-6 py-20">
+    <div class="reveal mb-10">
+      <p class="mono text-xs text-[#0a84ff] mb-3">04 // FOUNDATION</p>
+      <h2 class="text-4xl sm:text-5xl grad-text">Education</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4" id="eduGrid"></div>
+  </section>
 
-            particles = new THREE.Points(geometry, material);
-            scene.add(particles);
+  <!-- SKILLS -->
+  <section class="max-w-6xl mx-auto px-6 py-20">
+    <div class="reveal mb-10">
+      <p class="mono text-xs text-[#0a84ff] mb-3">05 // CAPABILITIES</p>
+      <h2 class="text-4xl sm:text-5xl grad-text">Technical Arsenal</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4" id="skillsGrid"></div>
+    <div class="glass p-6 mt-4 reveal">
+      <p class="mono text-xs text-[#0a84ff] mb-3">// ADDITIONAL COMPETENCIES</p>
+      <div id="extraSkills" class="flex flex-wrap gap-2"></div>
+    </div>
+  </section>
 
-            camera.position.z = 500;
+  <!-- FOOTER -->
+  <footer class="max-w-5xl mx-auto px-6 py-28 text-center">
+    <h2 class="text-4xl sm:text-6xl grad-text mb-6">Let's build something deterministic.</h2>
+    <a href="mailto:haardrao23@gmail.com" class="inline-block glass px-8 py-4 mono text-sm hover:text-white transition">haardrao23@gmail.com →</a>
+    <p class="mono text-xs text-[var(--muted)] mt-16">© 2025 HAARD RAO • RENDERED VIA THREE.JS + GLSL • CORE STATUS: STABLE</p>
+  </footer>
+</main>
 
-            animate();
-        }
+<!-- ============ DATA ============ -->
+<script>
+const RESUME_DATA = {
+  profile:{
+    name:"Haard Rao",
+    email:"haardrao23@gmail.com",
+    phone:"+1 313 478 2312"
+  },
+  stats:[
+    {v:"5+",l:"YEARS BUILDING"},
+    {v:"93%",l:"ESCALATIONS CUT (RVC)"},
+    {v:"100%",l:"API EFFICIENCY GAIN"},
+    {v:"IEEE",l:"IAVVC PUBLICATION"}
+  ],
+  experience:[
+    {
+      role:"Software Engineer", company:"Ford", loc:"Farmington, MI", date:"June 2025 – Present",
+      points:[
+        "Orchestrated resolution of high volume & high-severity vehicle software incidents monthly using CAN/CAN-FD diagnostics, firmware tracing, and distributed root-cause analysis to overcome cross-ECU configuration ambiguity, improving engineering efficiency by 30%.",
+        "Optimized diagnostic pipelines using signal decoding, system-state validation, and embedded firmware inspection to overcome prolonged fleet issue resolution cycles, improving turnaround efficiency by 25%.",
+        "Stabilized multi-module ECU interactions using deterministic validation logic and cross-module dependency mapping to overcome inconsistent recall behavior, improving repair accuracy by 35%.",
+        "Instituted automated recall compliance enforcement using Python (Pandas, Regex), rule-based validation engines, and firmware release auditing to overcome invalid ECU propagation risks, improving deployment integrity by 32%.",
+        "Rectified module-ordering system rejection failures using backend log tracing, REST API request/response validation, Git commit analysis, schema correction, and rule-engine patching to overcome invalid RVC hard-rejects in production, reducing escalations by 93%.",
+        "Remediated recall workflow outage using root cause analysis, environment parity validation, null-safe logic patching, configuration alignment, and rapid test standardization to overcome SVT failure across staging and production systems in Python, improving closure efficiency by 60%.",
+        "Automated failure triage workflows using telemetry extraction, structured data transformation, and analytical dashboards to overcome redundant engineering escalations, improving escalation handling efficiency by 20%.",
+        "Mentored cross-functional engineers using structured incident ownership frameworks and live-debugging walkthroughs to overcome onboarding delays, improving ramp-up efficiency by 33%."
+      ]
+    },
+    {
+      role:"Software Developer", company:"American Software LLC", loc:"Remote", date:"Jan 2025 – June 2025",
+      points:[
+        "Architected modular full-stack platform using Angular, .NET Core, REST APIs, and SOLID design principles to overcome monolithic latency constraints, improving frontend performance efficiency by 45%.",
+        "Expanded scalable API infrastructure using microservices architecture, distributed caching (Redis), and CI/CD automation pipelines to overcome horizontal throughput limitations, improving request efficiency by 100%.",
+        "Translated business requirements into Agile-ready implementation plans using stakeholder mapping and sprint optimization frameworks to overcome delivery ambiguity, improving sprint throughput efficiency by 25%.",
+        "Hardened runtime stability using lazy loading, code splitting, and state optimization techniques to overcome client-side rendering delays, improving UI efficiency by 35%.",
+        "Enhanced accessibility compliance using WCAG standards, semantic HTML5, and performance audits to overcome inconsistent user experience barriers, improving engagement efficiency by 30%."
+      ]
+    },
+    {
+      role:"Software Engineer", company:"University of Michigan", loc:"Dearborn, MI", date:"Feb 2024 – Dec 2024",
+      points:[
+        "Deployed real-time NLP inference engine using Python, GCP, Firebase, and time-complexity optimization to overcome live-event latency constraints, improving response efficiency by 25%.",
+        "Mitigated vehicular cybersecurity exposure using anomaly detection pipelines (Scikit-learn), CAN telemetry streaming, and statistical modeling to overcome intrusion blind spots, improving system resilience efficiency by 40%.",
+        "Constructed CAN-bus ECU validation testbench using embedded C, protocol timing analysis, and deterministic simulation frameworks to overcome message sequencing inconsistencies, improving validation efficiency by 23%.",
+        "Strengthened signal-level observability using real-time data visualization dashboards and telemetry analytics to overcome diagnostic blind spots, improving tuning efficiency by 43%.",
+        "Engineered real-time CAN telemetry visualization using D3.js, frequency-domain analysis, and attack-simulation modeling to overcome ambiguity in differentiating normal vs anomalous message states, improving cybersecurity detection efficiency by 38%.",
+        "Standardized version control discipline using Git branching strategies and CI validation checks to overcome deployment inconsistencies, improving release reliability efficiency by 15%."
+      ]
+    },
+    {
+      role:"Frontend Developer", company:"Crystalvoxx Ltd.", loc:"Gujarat, India", date:"Aug 2021 – Aug 2022",
+      points:[
+        "Modernized legacy healthcare platform workflows using React, Node.js, REST APIs, and secure coding practices to overcome high-load bottlenecks, improving application performance by 25%.",
+        "Institutionalized reusable UI architecture using component libraries, MVC design patterns, and JavaScript optimization to overcome redundant development cycles, improving build efficiency by 40%.",
+        "Enhanced production stability using Git workflows, regression testing, frontend profiling, and defect triage to overcome post-release instability, improving defect containment by 20%."
+      ]
+    },
+    {
+      role:"Web Developer", company:"LJ Design Center", loc:"Gujarat, India", date:"July 2020 – Aug 2021",
+      points:[
+        "Engineered real-time hackathon platform workflows using React, Node.js, SQL integration, REST APIs, and role-based access control to overcome fragmented submission processes, improving evaluation efficiency by 30%.",
+        "Optimized nonprofit operational reporting using REST APIs, automated data pipelines, and relational query optimization to overcome administrative bottlenecks, improving reporting efficiency by 40%.",
+        "Reinforced release governance using Git, CI/CD automation, and regression testing protocols to overcome post-deployment defects, improving release stability by 20%."
+      ]
+    }
+  ],
+  projects:[
+    {t:"Multi-Lingual Text Summarizer",m:"+30%",d:"Engineered multilingual transformer-based summarization pipeline using HuggingFace T5, PyTorch, tokenizer optimization, and sequence-complexity tuning to overcome semantic degradation and inference latency constraints, improving summarization efficiency by 30%."},
+    {t:"8-Bit Microprocessor",m:"+30%",d:"Constructed virtual 8-bit processor using VHDL, Xilinx Vivado simulation, ALU design, and deterministic timing validation to overcome instruction execution and race-condition inconsistencies, improving architectural simulation efficiency by 30%."},
+    {t:"Stock Market Prediction System",m:"+20%",d:"Developed hybrid CNN-LSTM forecasting model using TensorFlow, sentiment-integrated NLP preprocessing, and time-series optimization to overcome volatile financial signal noise, improving prediction efficiency by 20%."},
+    {t:"Cloud-Based Attendance Portal",m:"+95%",d:"Deployed scalable facial-recognition attendance system using GCP, OpenCV, Firebase, REST APIs, and fault-tolerant backend synchronization to overcome manual logging inefficiencies and concurrency bottlenecks, improving identification efficiency by 95%."},
+    {t:"Context Derivation for Knowledge Graph",m:"+35%",d:"Synthesized NLP-driven knowledge graph pipeline using spaCy, BERT, GPT-2, entity extraction, and relationship mapping algorithms to overcome unstructured contextual ambiguity, improving information retrieval efficiency by 35%."},
+    {t:"CultVerse – Social Commerce",m:"+25%",d:"Built event-driven social commerce platform using React, Firebase, collaborative filtering algorithms, and real-time analytics to overcome fragmented franchise engagement workflows, improving conversion efficiency by 25%."},
+    {t:"IoT Home Security System",m:"+30%",d:"Implemented embedded IoT intrusion detection system using Raspberry Pi, PIR sensors, Python automation, and cloud-synchronized alert dashboards to overcome delayed threat recognition, improving incident response efficiency by 30%."},
+    {t:"Realtime Fire Detection System",m:"+70%",d:"Engineered computer vision detection pipeline using YOLOv3, OpenCV, smoke-density modeling, and edge inference optimization to overcome high false-positive deployment constraints, improving detection efficiency by 70%."},
+    Here's the rest of the code, continuing exactly from where it cut off (the `projects` array in `RESUME_DATA`):
 
-        function animate() {
-            requestAnimationFrame(animate);
+```html
+    {t:"Arthur AI – NLP Virtual Assistant",m:"+28%",d:"Formulated modular conversational AI framework using Python-based intent classification, dialogue state management, and rule-based reasoning to overcome multi-intent ambiguity prior to LLM APIs, improving interaction efficiency by 28%."},
+    {t:"Automated Plant Watering System",m:"+25%",d:"Devised sensor-driven irrigation automation system using Arduino, embedded C, threshold algorithms, and interrupt-based control logic to overcome manual watering inefficiencies, improving resource utilization efficiency by 25%."}
+  ],
+  publications:[
+    {t:"DeepCANvas – Neural System for Vehicle CAN Data Anomaly Detection", note:"Selected in peer review for IEEE IAVVC Germany"}
+  ],
+  education:[
+    {
+      deg:"MSE — Computer Engineering",
+      school:"University of Michigan – Dearborn, MI",
+      date:"May 2024",
+      course:"Embedded Systems, Computer Architecture, Advanced Software Techniques, Intelligent Systems, Artificial Intelligence, Cloud Computing, NLP, Pattern Recognition, Web Development, Auto Sensors & Actuators"
+    },
+    {
+      deg:"BE — Computer Engineering",
+      school:"Gujarat Technological University – Gujarat, India",
+      date:"July 2021",
+      course:"Data Structures, Algorithms, Object-Oriented Programming, Digital Electronics"
+    }
+  ],
+  skills:[
+    {cat:"Programming & Systems", items:"Python, Java, C/C++, C#, JavaScript/TypeScript, SQL, Bash"},
+    {cat:"Frameworks", items:"React, Angular, Node.js, Express, .NET Core"},
+    {cat:"Cloud & DevOps", items:"AWS, GCP, Azure, Docker, Kubernetes, Jenkins, Terraform, CI/CD"},
+    {cat:"Databases", items:"PostgreSQL, MySQL, MongoDB, Redis, DynamoDB, BigQuery"},
+    {cat:"AI/ML", items:"PyTorch, TensorFlow, Scikit-learn, NLP, CNNs, RNNs, Generative AI"},
+    {cat:"Embedded Systems", items:"Embedded C, ARM, Arduino, CAN Bus, CAN-FD, ECU Diagnostics, VHDL"},
+    {cat:"Testing & Quality", items:"Unit, Integration, Performance, Load, Regression, Selenium, JMeter"},
+    {cat:"Engineering Practices", items:"Microservices, Distributed Systems, Data Structures & Algorithms, System Design, RCA"},
+    {cat:"Web & CMS Development", items:"HTML, CSS, Bootstrap, Responsive Design, WordPress, Drupal"}
+  ],
+  extraSkills:[
+    "Algorithm","Time Complexity","Space Complexity","Unit Testing","Integration Testing","System Testing","UAT","Performance Testing","Load Testing","Stress Testing","Security Testing","Penetration Testing","Regression Testing","Smoke Testing","Sanity Testing","Black-Box Testing","White-Box Testing","Test Automation","Selenium","Cypress","Playwright","Appium","JMeter","LoadRunner","SoapUI","Postman","Problem-Solving","Critical Thinking","Teamwork","Leadership","Communication","Collaboration","Adaptability","Time Management","Mentorship","Agile Mindset","Conflict Resolution","Negotiation","Presentation Skills","Stakeholder Management","Payment Gateways","Stripe","PayPal","Square","Quantitative Analysis","Data Engineering","Cloud Infrastructure","Jenkins","Troubleshooting","Continuous Development","Debugging","Continuous Improvement","Web Accessibility","UX Design Principles","Typography","Performance","Mockups","jQuery","Industry Trends","Graphic Design","Dreamweaver","Content Management","Bootstrap","Attention to Detail","Advising Clients","Adobe Photoshop","Acquisition"]
+};
+</script>
 
-            particles.rotation.x += 0.0003;
-            particles.rotation.y += 0.0005;
+<!-- ============ DOM RENDERING ============ -->
+<script>
+const $ = (s,r=document)=>r.querySelector(s);
+const el=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
 
-            // Mouse parallax effect
-            if (window.mouseX !== undefined) {
-                particles.rotation.x += (window.mouseY * 0.00001);
-                particles.rotation.y += (window.mouseX * 0.00001);
-            }
+/* STATS */
+(function(){
+  const g=$("#statsGrid");
+  RESUME_DATA.stats.forEach(s=>{
+    const c=el("div","glass p-6 reveal text-center");
+    c.innerHTML=`<div class="mono text-3xl sm:text-4xl text-white">${s.v}</div>
+      <div class="mono text-[10px] text-[var(--muted)] mt-2 tracking-widest">${s.l}</div>`;
+    g.appendChild(c);
+  });
+})();
 
-            renderer.render(scene, camera);
-        }
+/* TIMELINE */
+(function(){
+  const t=$("#timeline");
+  RESUME_DATA.experience.forEach((x,i)=>{
+    const wrap=el("div","relative mb-6 reveal");
+    const pts=x.points.map(p=>`<li class="flex gap-3 text-sm text-[var(--muted)] leading-relaxed">
+        <span class="text-[#0a84ff] mt-1">▹</span><span>${p}</span></li>`).join("");
+    wrap.innerHTML=`
+      <div class="tl-dot"></div>
+      <div class="glass p-6 card cursor-pointer">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="text-xl text-white">${x.role}</h3>
+            <p class="text-[var(--accent)] text-sm font-medium">${x.company} <span class="text-[var(--muted)]">• ${x.loc}</span></p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="mono text-[11px] text-[var(--muted)] hidden sm:inline">${x.date}</span>
+            <i data-lucide="chevron-down" class="chev w-5 h-5 text-[var(--muted)]"></i>
+          </div>
+        </div>
+        <p class="mono text-[11px] text-[var(--muted)] sm:hidden mt-2">${x.date}</p>
+        <div class="card-body"><ul class="space-y-3 mt-5 pt-5 border-t border-[var(--border)]">${pts}</ul></div>
+      </div>`;
+    t.appendChild(wrap);
+  });
+  t.addEventListener("click",e=>{
+    const card=e.target.closest(".card");
+    if(card)card.classList.toggle("open");
+  });
+})();
 
-        // Mouse tracking for parallax
-        document.addEventListener('mousemove', (e) => {
-            window.mouseX = e.clientX - window.innerWidth / 2;
-            window.mouseY = e.clientY - window.innerHeight / 2;
-        });
+/* PROJECTS */
+(function(){
+  const g=$("#projectGrid");
+  RESUME_DATA.projects.forEach((p,i)=>{
+    const span = (i%5===0)?"sm:col-span-2":"";
+    const c=el("div",`glass p-6 card cursor-pointer reveal ${span}`);
+    c.innerHTML=`
+      <div class="flex items-start justify-between">
+        <i data-lucide="cpu" class="w-5 h-5 text-[#0a84ff]"></i>
+        <span class="mono text-sm text-[#a1ffb0]">${p.m}</span>
+      </div>
+      <h3 class="text-lg text-white mt-4 leading-snug">${p.t}</h3>
+      <div class="card-body"><p class="text-sm text-[var(--muted)] mt-3 pt-3 border-t border-[var(--border)] leading-relaxed">${p.d}</p></div>
+      <div class="mono text-[10px] text-[var(--muted)] mt-4 flex items-center gap-1">
+        <span class="chev">▾</span> EXPAND DETAILS
+      </div>`;
+    g.appendChild(c);
+  });
+  g.addEventListener("click",e=>{
+    const card=e.target.closest(".card");
+    if(card)card.classList.toggle("open");
+  });
+})();
 
-        // Responsive resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+/* PUBLICATIONS */
+(function(){
+  const g=$("#pubs");
+  RESUME_DATA.publications.forEach(p=>{
+    const c=el("div","glass p-6 reveal flex items-start gap-4");
+    c.innerHTML=`<i data-lucide="file-badge" class="w-6 h-6 text-[#0a84ff] shrink-0"></i>
+      <div><h3 class="text-lg text-white">${p.t}</h3>
+      <p class="mono text-xs text-[#a1ffb0] mt-2">${p.note}</p></div>`;
+    g.appendChild(c);
+  });
+})();
 
-        // Initialize Three.js
-        initThree();
+/* EDUCATION */
+(function(){
+  const g=$("#eduGrid");
+  RESUME_DATA.education.forEach(e2=>{
+    const c=el("div","glass p-6 reveal");
+    c.innerHTML=`<div class="flex items-center justify-between">
+        <i data-lucide="graduation-cap" class="w-6 h-6 text-[#0a84ff]"></i>
+        <span class="mono text-xs text-[var(--muted)]">${e2.date}</span>
+      </div>
+      <h3 class="text-lg text-white mt-4">${e2.deg}</h3>
+      <p class="text-[var(--accent)] text-sm">${e2.school}</p>
+      <p class="text-xs text-[var(--muted)] mt-4 leading-relaxed"><span class="mono text-[10px]">RELEVANT COURSEWORK //</span> ${e2.course}</p>`;
+    g.appendChild(c);
+  });
+})();
 
-        // 3D Scroll Parallax Effect
-        function init3DScroll() {
-            window.addEventListener('scroll', () => {
-                const scrolled = window.pageYOffset;
-                const parallaxSections = document.querySelectorAll('.parallax-section');
-                
-                parallaxSections.forEach((section, index) => {
-                    const rect = section.getBoundingClientRect();
-                    const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
-                    
-                    if (scrollPercent > 0 && scrollPercent < 1) {
-                        const rotateX = (scrollPercent - 0.5) * 10;
-                        const translateZ = scrollPercent * 50;
-                        section.style.transform = `perspective(1000px) rotateX(${rotateX}deg) translateZ(${translateZ}px)`;
-                    }
-                });
+/* SKILLS */
+(function(){
+  const g=$("#skillsGrid");
+  RESUME_DATA.skills.forEach(s=>{
+    const tags=s.items.split(",").map(i=>`<span class="tag">${i.trim()}</span>`).join("");
+    const c=el("div","glass p-6 reveal");
+    c.innerHTML=`<h3 class="mono text-xs text-[#0a84ff] mb-4">${s.cat}</h3>
+      <div class="flex flex-wrap gap-2">${tags}</div>`;
+    g.appendChild(c);
+  });
+  const ex=$("#extraSkills");
+  RESUME_DATA.extraSkills.forEach(s=>ex.appendChild(el("span","tag",s)));
+})();
 
-                // Parallax effect for hero section
-                const hero = document.getElementById('home');
-                if (hero) {
-                    const offset = scrolled * 0.5;
-                    hero.style.transform = `translateY(${offset}px)`;
-                }
-            }, { passive: true });
-        }
+lucide.createIcons();
+</script>
 
-        init3DScroll();
+<!-- ============ LENIS (smooth scroll) ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
-        // Mobile Menu Toggle
-        function toggleMenu() {
-            const menu = document.getElementById('nav-menu');
-            menu.classList.toggle('active');
-        }
+<!-- ============ GSAP ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-        function closeMenu() {
-            const menu = document.getElementById('nav-menu');
-            menu.classList.remove('active');
-        }
+<!-- ============ THREE.JS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-        // Scroll to Top
-        const scrollTop = document.getElementById('scrollTop');
+<!-- ============ MAIN LOGIC ============ -->
+<script>
+const isMobile = window.matchMedia("(max-width:768px)").matches || !(()=>{try{const c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}})();
 
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollTop.style.display = 'flex';
-            } else {
-                scrollTop.style.display = 'none';
-            }
-        });
+/* ---------- LENIS ---------- */
+const lenis = new Lenis({
+  duration: 1.6,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+  wheelMultiplier: 0.9,
+  lerp: 0.08
+});
+function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
 
-        scrollTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+/* GSAP <-> Lenis bridge */
+gsap.registerPlugin(ScrollTrigger);
+lenis.on("scroll", ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
 
-        // Lazy Load Animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
+/* ---------- HUD ---------- */
+const scrollFill=$("#scrollFill"), scrollPct=$("#scrollPct"), packetsEl=$("#packets"), fpsEl=$("#fps");
+let packets=0;
+lenis.on("scroll",({progress})=>{
+  const p=Math.round((progress||0)*100);
+  scrollFill.style.width=p+"%";
+  scrollPct.textContent=p+"%";
+  packets=Math.floor((progress||0)*1048576);
+  packetsEl.textContent=packets.toLocaleString();
+});
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+/* ---------- REVEAL OBSERVER ---------- */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+},{threshold:0.12});
+document.querySelectorAll(".reveal").forEach(r=>io.observe(r));
 
-        document.querySelectorAll('.lazy-load').forEach(el => {
-            observer.observe(el);
-        });
+/* ---------- TERMINAL ---------- */
+const term=$("#terminal"), termOut=$("#termOut"), termIn=$("#termIn");
+const banner=`HAARD_OS v2.5 // Neural Resume Interface\nType 'help' for available commands.\n`;
+function termPrint(s){ termOut.textContent += "\n"+s+"\n"; termOut.scrollTop=termOut.scrollHeight; }
+function openTerm(){ term.classList.add("on"); if(!termOut.textContent) termOut.textContent=banner; termIn.focus(); }
+function closeTerm(){ term.classList.remove("on"); }
+$("#termBtn").addEventListener("click",openTerm);
+$("#termClose").addEventListener("click",closeTerm);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeTerm(); });
 
-        // Contact Form Handler
-        const contactForm = document.getElementById('contact-form');
-        const confirmModal = document.getElementById('confirmModal');
+const COMMANDS={
+  help:()=>`Available commands:
+  about      - profile summary
+  experience - work history
+  projects   - project portfolio
+  skills     - technical arsenal
+  education  - academic record
+  publications - research
+  contact    - reach out
+  clear      - clear screen`,
+  about:()=>`Haard Rao — Software Engineer.
+Embedded Systems × AI × Web. 5+ years.
+MSE Computer Engineering (UMich-Dearborn).`,
+  experience:()=>RESUME_DATA.experience.map(x=>`> ${x.role} @ ${x.company} (${x.date})`).join("\n"),
+  projects:()=>{ scrollToSel("#projectGrid"); return RESUME_DATA.projects.map(p=>`> ${p.t}  [${p.m}]`).join("\n"); },
+  skills:()=>RESUME_DATA.skills.map(s=>`> ${s.cat}: ${s.items}`).join("\n"),
+  education:()=>RESUME_DATA.education.map(e=>`> ${e.deg} — ${e.school} (${e.date})`).join("\n"),
+  publications:()=>RESUME_DATA.publications.map(p=>`> ${p.t}\n  ${p.note}`).join("\n"),
+  contact:()=>`Email: ${RESUME_DATA.profile.email}\nPhone: ${RESUME_DATA.profile.phone}`,
+  clear:()=>{ termOut.textContent=banner; return ""; }
+};
+function scrollToSel(sel){ const t=$(sel); if(t){ closeTerm(); lenis.scrollTo(t,{offset:-80}); } }
+termIn.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    const cmd=termIn.value.trim().toLowerCase();
+    termOut.textContent += `\n> ${cmd}`;
+    if(cmd in COMMANDS){ const out=COMMANDS[cmd](); if(out) termPrint(out); }
+    else if(cmd) termPrint(`command not found: ${cmd}. Type 'help'.`);
+    termIn.value="";
+    termOut.scrollTop=termOut.scrollHeight;
+  }
+});
 
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
+/* ================= THREE.JS NEURAL CORE ================= */
+let renderer, scene, camera, core, ring, ringPts, raysGroup;
+const mouse={x:0,y:0}, target={x:0,y:0};
 
-            confirmModal.style.display = 'flex';
-        });
+function initThree(){
+  const canvas=$("#webgl");
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
 
-        function confirmSend() {
-            if (formData) {
-                // Using FormSubmit.co for email forwarding
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'https://formsubmit.co/haardrao23@gmail.com';
-                form.style.display = 'none';
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,0.1,100);
+  camera.position.z=6;
 
-                const fields = [
-                    { name: 'name', value: formData.name },
-                    { name: 'email', value: formData.email },
-                    { name: '_subject', value: formData.subject },
-                    { name: 'message', value: formData.message },
-                    { name: '_captcha', value: 'false' },
-                    { name: '_template', value: 'table' }
-                ];
+  /* --- Fresnel core (icosahedron) --- */
+  const geo=new THREE.IcosahedronGeometry(1.5,4);
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{
+      uTime:{value:0},
+      uMouse:{value:new THREE.Vector2(0,0)},
+      uColorA:{value:new THREE.Color(0x0a84ff)},
+      uColorB:{value:new THREE.Color(0x64d2ff)}
+    },
+    vertexShader:`
+      uniform float uTime;
+      uniform vec2 uMouse;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      // simple noise
+      float hash(vec3 p){p=fract(p*0.3183099+0.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+      void main(){
+        vNormal=normalize(normalMatrix*normal);
+        float disp=sin(position.x*3.0+uTime)*0.04+sin(position.y*4.0+uTime*1.3)*0.04;
+        vec3 pos=position+normal*disp;
+        vec4 mv=modelViewMatrix*vec4(pos,1.0);
+        vView=normalize(-mv.xyz);
+        gl_Position=projectionMatrix*mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uColorA;
+      uniform vec3 uColorB;
+      uniform float uTime;
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main(){
+        float fres=pow(1.0-max(dot(vNormal,vView),0.0),2.5);
+        vec3 col=mix(uColorA,uColorB,fres);
+        float pulse=0.6+0.4*sin(uTime*1.5);
+        gl_FragColor=vec4(col*fres*pulse, fres*0.9+0.05);
+      }`,
+    transparent:true,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+  });
+  core=new THREE.Mesh(geo,mat);
+  scene.add(core);
 
-                fields.forEach(field => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = field.name;
-                    input.value = field.value;
-                    form.appendChild(input);
-                });
+  /* inner wireframe */
+  const wire=new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.05,1),
+    new THREE.MeshBasicMaterial({color:0x0a84ff,wireframe:true,transparent:true,opacity:0.15})
+  );
+  core.add(wire);
 
-                document.body.appendChild(form);
-                form.submit();
+  /* --- Data Ring (CAN-bus / AI weights) --- */
+  ringPts=new THREE.Group();
+  const N=260;
+  const ringGeo=new THREE.BufferGeometry();
+  const pos=new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    const a=(i/N)*Math.PI*2;
+    const r=3.0+Math.random()*0.25;
+    pos[i*3]=Math.cos(a)*r;
+    pos[i*3+1]=(Math.random()-0.5)*0.3;
+    pos[i*3+2]=Math.sin(a)*r;
+  }
+  ringGeo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  ring=new THREE.Points(ringGeo,new THREE.PointsMaterial({
+    color:0x64d2ff,size:0.04,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false
+  }));
+  ring.rotation.x=0.5;
+  scene.add(ring);
 
-                confirmModal.style.display = 'none';
-                contactForm.reset();
-                
-                alert('Message sent successfully! I\'ll get back to you soon.');
-            }
-        }
+  /* second ring */
+  const ring2=ring.clone();
+  ring2.rotation.x=-0.6; ring2.rotation.z=0.4; ring2.scale.setScalar(1.25);
+  scene.add(ring2);
+  window._ring2=ring2;
 
-        function cancelSend() {
-            confirmModal.style.display = 'none';
-            formData = null;
-        }
+  /* ambient field particles */
+  const fGeo=new THREE.BufferGeometry();
+  const FN=400, fp=new Float32Array(FN*3);
+  for(let i=0;i<FN;i++){ fp[i*3]=(Math.random()-0.5)*30; fp[i*3+1]=(Math.random()-0.5)*30; fp[i*3+2]=(Math.random()-0.5)*30; }
+  fGeo.setAttribute("position",new THREE.BufferAttribute(fp,3));
+  const field=new THREE.Points(fGeo,new THREE.PointsMaterial({color:0x444444,size:0.03,transparent:true,opacity:0.5}));
+  scene.add(field);
+  window._field=field;
 
-        // Close modal on outside click
-        confirmModal.addEventListener('click', (e) => {
-            if (e.target === confirmModal) {
-                cancelSend();
-            }
-        });
+  window.addEventListener("mousemove",e=>{
+    target.x=(e.clientX/innerWidth-0.5)*2;
+    target.y=(e.clientY/innerHeight-0.5)*2;
+  });
+  window.addEventListener("resize",onResize);
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
+  setupScrollScrub();
+}
 
-        // Performance: Lazy load timeline
-        window.addEventListener('scroll', () => {
-            const timeline = document.querySelector('.timeline');
-            if (timeline) {
-                const rect = timeline.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    timeline.classList.add('visible');
-                }
-            }
-        }, { passive: true });
-    </script>
+function onResize(){
+  if(!renderer)return;
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+}
+
+/* ---- Scroll scrubbing: disassemble core ---- */
+function setupScrollScrub(){
+  gsap.to(core.scale,{x:0.55,y:0.55,z:0.55,scrollTrigger:{trigger:"#content",start:"top top",end:"bottom bottom",scrub:1}});
+  gsap.to(core.position,{x:2.2,scrollTrigger:{trigger:"#content",start:"top top",end:"40% bottom",scrub:1}});
+  gsap.to(ring.position,{x:-2.5,y:1,scrollTrigger:{trigger:"#content",start:"20% top",end:"70% bottom",scrub:1}});
+  gsap.to(window._ring2.position,{x:2.5,y:-1.2,scrollTrigger:{trigger:"#content",start:"30% top",end:"90% bottom",scrub:1}});
+  gsap.to(camera.position,{z:9,scrollTrigger:{trigger:"#content",start:"top top",end:"bottom bottom",scrub:1.2}});
+}
+
+/* ---- Throttled render loop ---- */
+let last=0, frames=0, fpsLast=performance.now(), running=true;
+const FPS_CAP=60, FRAME_MS=1000/FPS_CAP;
+
+function animate(now){
+  requestAnimationFrame(animate);
+  if(!running) return;
+
+  // throttle to FPS cap
+  const delta = now - last;
+  if(delta < FRAME_MS) return;
+  last = now - (delta % FRAME_MS);
+
+  // FPS counter
+  frames++;
+  if(now - fpsLast >= 1000){
+    fpsEl.textContent = frames;
+    frames = 0;
+    fpsLast = now;
+  }
+
+  const t = now * 0.001;
+
+  // smooth mouse easing
+  mouse.x += (target.x - mouse.x) * 0.05;
+  mouse.y += (target.y - mouse.y) * 0.05;
+
+  if(core){
+    core.material.uniforms.uTime.value = t;
+    core.material.uniforms.uMouse.value.set(mouse.x, mouse.y);
+    core.rotation.y += 0.0025;
+    core.rotation.x += 0.0012;
+    // mouse parallax tilt
+    core.rotation.y += mouse.x * 0.01;
+    core.rotation.x += mouse.y * 0.01;
+  }
+  if(ring){ ring.rotation.y += 0.003; ring.rotation.z += 0.0008; }
+  if(window._ring2){ window._ring2.rotation.y -= 0.004; window._ring2.rotation.x += 0.0006; }
+  if(window._field){ window._field.rotation.y += 0.0004; }
+
+  // subtle camera parallax
+  camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.03;
+  camera.position.y += (-mouse.y * 0.5 - camera.position.y) * 0.03;
+  camera.lookAt(0,0,0);
+
+  renderer.render(scene, camera);
+}
+
+/* ---- Pause render when tab hidden (performance) ---- */
+document.addEventListener("visibilitychange",()=>{ running = !document.hidden; });
+
+/* ---- Pause render when canvas off-screen ---- */
+const heroSection = document.querySelector("#content");
+
+/* ================= BOOT ================= */
+if(isMobile){
+  // Mobile / no-WebGL fallback: CSS shader gradient
+  $("#cssfallback").style.display = "block";
+  $("#webgl").style.display = "none";
+  fpsEl.textContent = "—";
+  // still drive ScrollTrigger refresh for reveals
+} else {
+  try{
+    initThree();
+    requestAnimationFrame(animate);
+  }catch(err){
+    console.warn("WebGL init failed, using fallback:", err);
+    $("#cssfallback").style.display = "block";
+    $("#webgl").style.display = "none";
+    fpsEl.textContent = "—";
+  }
+}
+
+/* ---- Refresh ScrollTrigger after everything loads ---- */
+window.addEventListener("load",()=>{ ScrollTrigger.refresh(); });
+
+/* ---- Hero text intro (GSAP) ---- */
+gsap.fromTo(".reveal:first-of-type",
+  {opacity:0,y:30},
+  {opacity:1,y:0,duration:1.4,ease:"power3.out",delay:0.2}
+);
+
+/* ---- Keyboard shortcut: press 'T' to open terminal ---- */
+document.addEventListener("keydown",e=>{
+  if(e.key.toLowerCase()==="t" && !term.classList.contains("on") && document.activeElement.tagName!=="INPUT"){
+    e.preventDefault();
+    openTerm();
+  }
+});
+
+/* ---- Simulated "Data Packets" idle ticker (when not scrolling) ---- */
+setInterval(()=>{
+  if(document.hidden) return;
+  // small organic drift so the HUD always feels "alive"
+  packets += Math.floor(Math.random()*42);
+  packetsEl.textContent = packets.toLocaleString();
+}, 1200);
+</script>
+
 </body>
 </html>
