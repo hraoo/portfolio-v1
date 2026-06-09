@@ -4,114 +4,56 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Haard Rao — Neural Systems Engineer</title>
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Lucide -->
 <script src="https://unpkg.com/lucide@latest"></script>
-
 <style>
-  :root{
-    --bg:#000000;
-    --fg:#f5f5f7;
-    --muted:#86868b;
-    --accent:#0a84ff;
-    --glass:rgba(255,255,255,0.04);
-    --border:rgba(255,255,255,0.10);
-  }
+  :root{--bg:#000;--fg:#f5f5f7;--muted:#86868b;--accent:#0a84ff;--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.10);}
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);}
   body{font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   .mono{font-family:'JetBrains Mono',monospace;}
   h1,h2,h3{font-weight:700;letter-spacing:-0.03em;}
   ::selection{background:var(--accent);color:#fff;}
-
-  /* Lenis */
-  html.lenis,html.lenis body{height:auto;}
-  .lenis.lenis-smooth{scroll-behavior:auto !important;}
-
-  /* Canvas */
   #webgl{position:fixed;inset:0;z-index:0;pointer-events:none;}
   #content{position:relative;z-index:2;}
-
-  /* Glass */
-  .glass{
-    background:var(--glass);
-    backdrop-filter:blur(24px) saturate(200%);
-    -webkit-backdrop-filter:blur(24px) saturate(200%);
-    border:1px solid var(--border);
-    border-radius:22px;
-  }
+  .glass{background:var(--glass);backdrop-filter:blur(24px) saturate(200%);-webkit-backdrop-filter:blur(24px) saturate(200%);border:1px solid var(--border);border-radius:22px;}
   .glass:hover{border-color:rgba(255,255,255,0.22);}
-
-  /* HUD */
   #hud{position:fixed;top:0;left:0;right:0;z-index:40;}
-  .hud-bar{
-    background:rgba(0,0,0,0.35);
-    backdrop-filter:blur(20px) saturate(180%);
-    -webkit-backdrop-filter:blur(20px) saturate(180%);
-    border-bottom:1px solid var(--border);
-  }
+  .hud-bar{background:rgba(0,0,0,0.35);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);}
   #scrollFill{height:1px;background:linear-gradient(90deg,var(--accent),#64d2ff);width:0%;}
-
-  /* Reveal */
   .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);}
   .reveal.in{opacity:1;transform:none;}
-
-  /* Expandable card */
   .card-body{max-height:0;overflow:hidden;transition:max-height .7s cubic-bezier(.16,1,.3,1),opacity .5s ease;opacity:0;}
-  .card.open .card-body{max-height:1400px;opacity:1;}
+  .card.open .card-body{max-height:2000px;opacity:1;}
   .card .chev{transition:transform .5s cubic-bezier(.16,1,.3,1);}
   .card.open .chev{transform:rotate(180deg);}
-
-  /* Timeline */
   .tl-line{position:absolute;left:7px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--border) 8%,var(--border) 92%,transparent);}
   .tl-dot{position:absolute;left:0;top:6px;width:15px;height:15px;border-radius:50%;background:#000;border:1px solid var(--accent);box-shadow:0 0 14px rgba(10,132,255,.6);}
-
-  /* Terminal */
   #terminal{position:fixed;inset:0;z-index:60;display:none;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);}
   #terminal.on{display:flex;}
   .term-win{background:rgba(10,10,12,0.92);border:1px solid var(--border);}
   #termOut{white-space:pre-wrap;}
   #termIn{background:transparent;border:none;outline:none;color:var(--fg);width:100%;}
-
-  /* Mobile shader fallback */
-  #cssfallback{
-    position:fixed;inset:0;z-index:1;display:none;
-    background:
-      radial-gradient(circle at 30% 20%,rgba(10,132,255,.25),transparent 40%),
-      radial-gradient(circle at 70% 70%,rgba(100,210,255,.18),transparent 45%),
-      radial-gradient(circle at 50% 50%,rgba(120,80,255,.12),transparent 55%),
-      #000;
-    background-size:200% 200%;
-    animation:flow 18s ease infinite;
-  }
+  #cssfallback{position:fixed;inset:0;z-index:1;display:none;background:radial-gradient(circle at 30% 20%,rgba(10,132,255,.25),transparent 40%),radial-gradient(circle at 70% 70%,rgba(100,210,255,.18),transparent 45%),radial-gradient(circle at 50% 50%,rgba(120,80,255,.12),transparent 55%),#000;background-size:200% 200%;animation:flow 18s ease infinite;}
   @keyframes flow{0%{background-position:0 0}50%{background-position:100% 100%}100%{background-position:0 0}}
-
   .tag{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--muted);}
   .grad-text{background:linear-gradient(180deg,#fff,#a1a1a6);-webkit-background-clip:text;background-clip:text;color:transparent;}
   a{color:inherit;}
 </style>
 </head>
 <body>
-
-<!-- WebGL + fallback -->
 <div id="cssfallback"></div>
 <canvas id="webgl"></canvas>
 
-<!-- HUD -->
 <div id="hud">
   <div class="hud-bar px-4 sm:px-8 py-3 flex items-center justify-between mono text-xs">
     <div class="flex items-center gap-3">
       <span class="w-2 h-2 rounded-full bg-[#0a84ff] inline-block animate-pulse"></span>
       <span class="text-white">HAARD.RAO</span>
-      <span class="text-[var(--muted)] hidden sm:inline">// NEURAL_SYSTEMS_ENGINEER</span>
+      <span class="text-[var(--muted)] hidden sm:inline">// SOFTWARE_ENGINEER</span>
     </div>
     <div class="flex items-center gap-4 sm:gap-6">
       <span class="text-[var(--muted)] hidden sm:inline">FPS:<span id="fps" class="text-white">60</span></span>
@@ -120,10 +62,9 @@
       <button id="termBtn" class="text-[#0a84ff] hover:text-white transition">[ TERMINAL ]</button>
     </div>
   </div>
-  <div class="w-full h-px bg-transparent"><div id="scrollFill"></div></div>
+  <div class="w-full h-px"><div id="scrollFill"></div></div>
 </div>
 
-<!-- Terminal -->
 <div id="terminal">
   <div class="term-win glass w-[92%] max-w-3xl mx-auto my-auto p-5 mono text-sm rounded-2xl">
     <div class="flex items-center justify-between mb-3 text-[var(--muted)]">
@@ -131,30 +72,19 @@
       <button id="termClose" class="hover:text-white">✕</button>
     </div>
     <div id="termOut" class="text-[#a1ffb0] mb-3 max-h-[50vh] overflow-y-auto leading-relaxed"></div>
-    <div class="flex gap-2 items-center">
-      <span class="text-[#0a84ff]">&gt;</span>
-      <input id="termIn" autocomplete="off" placeholder="type 'help'..." />
-    </div>
+    <div class="flex gap-2 items-center"><span class="text-[#0a84ff]">&gt;</span><input id="termIn" autocomplete="off" placeholder="type 'help'..." /></div>
   </div>
 </div>
 
-<!-- CONTENT -->
 <main id="content">
-
-  <!-- HERO -->
   <section class="min-h-screen flex flex-col justify-center items-center text-center px-6">
     <div class="reveal">
       <p class="mono text-xs text-[var(--muted)] mb-5 tracking-[0.3em]">[ SYSTEM ONLINE • CORE INITIALIZED ]</p>
       <h1 class="text-5xl sm:text-7xl md:text-8xl grad-text leading-none">Haard Rao</h1>
-      <p class="mt-6 text-lg sm:text-2xl text-[var(--muted)] font-light max-w-2xl mx-auto">
-        Software Engineer building at the intersection of
-        <span class="text-white">Embedded Systems</span>,
-        <span class="text-white">AI</span> &
-        <span class="text-white">Web</span>.
-      </p>
+      <p class="mt-6 text-lg sm:text-2xl text-[var(--muted)] font-light max-w-2xl mx-auto">Software Engineer building at the intersection of <span class="text-white">Embedded Systems</span>, <span class="text-white">AI</span> & <span class="text-white">Web</span>.</p>
       <div class="flex flex-wrap gap-3 justify-center mt-8 mono text-xs">
         <a href="mailto:haardrao23@gmail.com" class="tag hover:text-white transition">haardrao23@gmail.com</a>
-        <span class="tag">+1 313 478 2312</span>
+        <a href="tel:+13134782312" class="tag hover:text-white transition">+1 313 478 2312</a>
         <span class="tag">LinkedIn</span>
         <span class="tag">Portfolio</span>
       </div>
@@ -162,63 +92,35 @@
     <div class="absolute bottom-10 mono text-xs text-[var(--muted)] animate-bounce">SCROLL TO DISASSEMBLE ↓</div>
   </section>
 
-  <!-- ABOUT / STATS -->
-  <section class="max-w-6xl mx-auto px-6 py-28">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="statsGrid"></div>
-  </section>
+  <section class="max-w-6xl mx-auto px-6 py-28"><div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="statsGrid"></div></section>
 
-  <!-- EXPERIENCE -->
   <section class="max-w-5xl mx-auto px-6 py-20">
-    <div class="reveal mb-14">
-      <p class="mono text-xs text-[#0a84ff] mb-3">01 // EMBEDDED + SYSTEMS</p>
-      <h2 class="text-4xl sm:text-5xl grad-text">Professional Experience</h2>
-    </div>
-    <div class="relative pl-8" id="timeline">
-      <div class="tl-line"></div>
-    </div>
+    <div class="reveal mb-14"><p class="mono text-xs text-[#0a84ff] mb-3">01 // EMBEDDED + SYSTEMS</p><h2 class="text-4xl sm:text-5xl grad-text">Professional Experience</h2></div>
+    <div class="relative pl-8" id="timeline"><div class="tl-line"></div></div>
   </section>
 
-  <!-- PROJECTS BENTO -->
   <section class="max-w-6xl mx-auto px-6 py-20">
-    <div class="reveal mb-14">
-      <p class="mono text-xs text-[#0a84ff] mb-3">02 // AI + APPLICATIONS</p>
-      <h2 class="text-4xl sm:text-5xl grad-text">Project Experience</h2>
-    </div>
+    <div class="reveal mb-14"><p class="mono text-xs text-[#0a84ff] mb-3">02 // AI + APPLICATIONS</p><h2 class="text-4xl sm:text-5xl grad-text">Project Experience</h2></div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="projectGrid"></div>
   </section>
 
-  <!-- PUBLICATIONS -->
   <section class="max-w-5xl mx-auto px-6 py-20">
-    <div class="reveal mb-10">
-      <p class="mono text-xs text-[#0a84ff] mb-3">03 // RESEARCH</p>
-      <h2 class="text-4xl sm:text-5xl grad-text">Publications</h2>
-    </div>
+    <div class="reveal mb-10"><p class="mono text-xs text-[#0a84ff] mb-3">03 // RESEARCH</p><h2 class="text-4xl sm:text-5xl grad-text">Publications</h2></div>
     <div id="pubs" class="space-y-4"></div>
   </section>
 
-  <!-- EDUCATION -->
   <section class="max-w-5xl mx-auto px-6 py-20">
-    <div class="reveal mb-10">
-      <p class="mono text-xs text-[#0a84ff] mb-3">04 // FOUNDATION</p>
-      <h2 class="text-4xl sm:text-5xl grad-text">Education</h2>
-    </div>
+    <div class="reveal mb-10"><p class="mono text-xs text-[#0a84ff] mb-3">04 // FOUNDATION</p><h2 class="text-4xl sm:text-5xl grad-text">Education</h2></div>
     <div class="grid md:grid-cols-2 gap-4" id="eduGrid"></div>
   </section>
 
-  <!-- SKILLS -->
   <section class="max-w-6xl mx-auto px-6 py-20">
-    <div class="reveal mb-10">
-      <p class="mono text-xs text-[#0a84ff] mb-3">05 // CAPABILITIES</p>
-      <h2 class="text-4xl sm:text-5xl grad-text">Technical Arsenal</h2>
-    </div>
+    <div class="reveal mb-10"><p class="mono text-xs text-[#0a84ff] mb-3">05 // CAPABILITIES</p><h2 class="text-4xl sm:text-5xl grad-text">Technical Arsenal</h2></div>
     <div class="grid md:grid-cols-2 gap-4" id="skillsGrid"></div>
-    <div class="glass p-6 mt-4 reveal">
-      <p class="mono text-xs text-[#0a84ff] mb-3">// ADDITIONAL COMPETENCIES</p>
-      <div id="extraSkills" class="flex flex-wrap gap-2"></div>
-    </div>
+    <div class="glass p-6 mt-4 reveal"><p class="mono text-xs text-[#0a84ff] mb-3">// ADDITIONAL COMPETENCIES</p><div id="extraSkills" class="flex flex-wrap gap-2"></div></div>
+    <div class="glass p-6 mt-4 reveal"><p class="mono text-xs text-[#0a84ff] mb-3">// PROJECT DOMAIN KEYWORDS</p><div id="projKeywords" class="flex flex-wrap gap-2"></div></div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="max-w-5xl mx-auto px-6 py-28 text-center">
     <h2 class="text-4xl sm:text-6xl grad-text mb-6">Let's build something deterministic.</h2>
     <a href="mailto:haardrao23@gmail.com" class="inline-block glass px-8 py-4 mono text-sm hover:text-white transition">haardrao23@gmail.com →</a>
@@ -226,14 +128,10 @@
   </footer>
 </main>
 
-<!-- ============ DATA ============ -->
 <script>
+/* ================= COMPLETE RESUME DATABASE — 100% ================= */
 const RESUME_DATA = {
-  profile:{
-    name:"Haard Rao",
-    email:"haardrao23@gmail.com",
-    phone:"+1 313 478 2312"
-  },
+  profile:{ name:"Haard Rao", email:"haardrao23@gmail.com", phone:"+1 313 478 2312", links:["LinkedIn","Portfolio"] },
   stats:[
     {v:"5+",l:"YEARS BUILDING"},
     {v:"93%",l:"ESCALATIONS CUT (RVC)"},
@@ -241,56 +139,41 @@ const RESUME_DATA = {
     {v:"IEEE",l:"IAVVC PUBLICATION"}
   ],
   experience:[
-    {
-      role:"Software Engineer", company:"Ford", loc:"Farmington, MI", date:"June 2025 – Present",
-      points:[
-        "Orchestrated resolution of high volume & high-severity vehicle software incidents monthly using CAN/CAN-FD diagnostics, firmware tracing, and distributed root-cause analysis to overcome cross-ECU configuration ambiguity, improving engineering efficiency by 30%.",
-        "Optimized diagnostic pipelines using signal decoding, system-state validation, and embedded firmware inspection to overcome prolonged fleet issue resolution cycles, improving turnaround efficiency by 25%.",
-        "Stabilized multi-module ECU interactions using deterministic validation logic and cross-module dependency mapping to overcome inconsistent recall behavior, improving repair accuracy by 35%.",
-        "Instituted automated recall compliance enforcement using Python (Pandas, Regex), rule-based validation engines, and firmware release auditing to overcome invalid ECU propagation risks, improving deployment integrity by 32%.",
-        "Rectified module-ordering system rejection failures using backend log tracing, REST API request/response validation, Git commit analysis, schema correction, and rule-engine patching to overcome invalid RVC hard-rejects in production, reducing escalations by 93%.",
-        "Remediated recall workflow outage using root cause analysis, environment parity validation, null-safe logic patching, configuration alignment, and rapid test standardization to overcome SVT failure across staging and production systems in Python, improving closure efficiency by 60%.",
-        "Automated failure triage workflows using telemetry extraction, structured data transformation, and analytical dashboards to overcome redundant engineering escalations, improving escalation handling efficiency by 20%.",
-        "Mentored cross-functional engineers using structured incident ownership frameworks and live-debugging walkthroughs to overcome onboarding delays, improving ramp-up efficiency by 33%."
-      ]
-    },
-    {
-      role:"Software Developer", company:"American Software LLC", loc:"Remote", date:"Jan 2025 – June 2025",
-      points:[
-        "Architected modular full-stack platform using Angular, .NET Core, REST APIs, and SOLID design principles to overcome monolithic latency constraints, improving frontend performance efficiency by 45%.",
-        "Expanded scalable API infrastructure using microservices architecture, distributed caching (Redis), and CI/CD automation pipelines to overcome horizontal throughput limitations, improving request efficiency by 100%.",
-        "Translated business requirements into Agile-ready implementation plans using stakeholder mapping and sprint optimization frameworks to overcome delivery ambiguity, improving sprint throughput efficiency by 25%.",
-        "Hardened runtime stability using lazy loading, code splitting, and state optimization techniques to overcome client-side rendering delays, improving UI efficiency by 35%.",
-        "Enhanced accessibility compliance using WCAG standards, semantic HTML5, and performance audits to overcome inconsistent user experience barriers, improving engagement efficiency by 30%."
-      ]
-    },
-    {
-      role:"Software Engineer", company:"University of Michigan", loc:"Dearborn, MI", date:"Feb 2024 – Dec 2024",
-      points:[
-        "Deployed real-time NLP inference engine using Python, GCP, Firebase, and time-complexity optimization to overcome live-event latency constraints, improving response efficiency by 25%.",
-        "Mitigated vehicular cybersecurity exposure using anomaly detection pipelines (Scikit-learn), CAN telemetry streaming, and statistical modeling to overcome intrusion blind spots, improving system resilience efficiency by 40%.",
-        "Constructed CAN-bus ECU validation testbench using embedded C, protocol timing analysis, and deterministic simulation frameworks to overcome message sequencing inconsistencies, improving validation efficiency by 23%.",
-        "Strengthened signal-level observability using real-time data visualization dashboards and telemetry analytics to overcome diagnostic blind spots, improving tuning efficiency by 43%.",
-        "Engineered real-time CAN telemetry visualization using D3.js, frequency-domain analysis, and attack-simulation modeling to overcome ambiguity in differentiating normal vs anomalous message states, improving cybersecurity detection efficiency by 38%.",
-        "Standardized version control discipline using Git branching strategies and CI validation checks to overcome deployment inconsistencies, improving release reliability efficiency by 15%."
-      ]
-    },
-    {
-      role:"Frontend Developer", company:"Crystalvoxx Ltd.", loc:"Gujarat, India", date:"Aug 2021 – Aug 2022",
-      points:[
-        "Modernized legacy healthcare platform workflows using React, Node.js, REST APIs, and secure coding practices to overcome high-load bottlenecks, improving application performance by 25%.",
-        "Institutionalized reusable UI architecture using component libraries, MVC design patterns, and JavaScript optimization to overcome redundant development cycles, improving build efficiency by 40%.",
-        "Enhanced production stability using Git workflows, regression testing, frontend profiling, and defect triage to overcome post-release instability, improving defect containment by 20%."
-      ]
-    },
-    {
-      role:"Web Developer", company:"LJ Design Center", loc:"Gujarat, India", date:"July 2020 – Aug 2021",
-      points:[
-        "Engineered real-time hackathon platform workflows using React, Node.js, SQL integration, REST APIs, and role-based access control to overcome fragmented submission processes, improving evaluation efficiency by 30%.",
-        "Optimized nonprofit operational reporting using REST APIs, automated data pipelines, and relational query optimization to overcome administrative bottlenecks, improving reporting efficiency by 40%.",
-        "Reinforced release governance using Git, CI/CD automation, and regression testing protocols to overcome post-deployment defects, improving release stability by 20%."
-      ]
-    }
+    {role:"Software Engineer", company:"Ford", loc:"Farmington, MI", date:"June 2025 – Present", points:[
+      "Orchestrated resolution of high volume & high-severity vehicle software incidents monthly using CAN/CAN-FD diagnostics, firmware tracing, and distributed root-cause analysis to overcome cross-ECU configuration ambiguity, improving engineering efficiency by 30%.",
+      "Optimized diagnostic pipelines using signal decoding, system-state validation, and embedded firmware inspection to overcome prolonged fleet issue resolution cycles, improving turnaround efficiency by 25%.",
+      "Stabilized multi-module ECU interactions using deterministic validation logic and cross-module dependency mapping to overcome inconsistent recall behavior, improving repair accuracy by 35%.",
+      "Instituted automated recall compliance enforcement using Python (Pandas, Regex), rule-based validation engines, and firmware release auditing to overcome invalid ECU propagation risks, improving deployment integrity by 32%.",
+      "Rectified module-ordering system rejection failures using backend log tracing, REST API request/response validation, Git commit analysis, schema correction, and rule-engine patching to overcome invalid RVC hard-rejects in production, reducing escalations by 93%.",
+      "Remediated recall workflow outage using root cause analysis, environment parity validation, null-safe logic patching, configuration alignment, and rapid test standardization to overcome SVT failure across staging and production systems in Python, improving closure efficiency by 60%.",
+      "Automated failure triage workflows using telemetry extraction, structured data transformation, and analytical dashboards to overcome redundant engineering escalations, improving escalation handling efficiency by 20%.",
+      "Mentored cross-functional engineers using structured incident ownership frameworks and live-debugging walkthroughs to overcome onboarding delays, improving ramp-up efficiency by 33%."
+    ]},
+    {role:"Software Developer", company:"American Software LLC", loc:"Remote", date:"Jan 2025 – June 2025", points:[
+      "Architected modular full-stack platform using Angular, .NET Core, REST APIs, and SOLID design principles to overcome monolithic latency constraints, improving frontend performance efficiency by 45%.",
+      "Expanded scalable API infrastructure using microservices architecture, distributed caching (Redis), and CI/CD automation pipelines to overcome horizontal throughput limitations, improving request efficiency by 100%.",
+      "Translated business requirements into Agile-ready implementation plans using stakeholder mapping and sprint optimization frameworks to overcome delivery ambiguity, improving sprint throughput efficiency by 25%.",
+      "Hardened runtime stability using lazy loading, code splitting, and state optimization techniques to overcome client-side rendering delays, improving UI efficiency by 35%.",
+      "Enhanced accessibility compliance using WCAG standards, semantic HTML5, and performance audits to overcome inconsistent user experience barriers, improving engagement efficiency by 30%."
+    ]},
+    {role:"Software Engineer", company:"University of Michigan", loc:"Dearborn, MI", date:"Feb 2024 – Dec 2024", points:[
+      "Deployed real-time NLP inference engine using Python, GCP, Firebase, and time-complexity optimization to overcome live-event latency constraints, improving response efficiency by 25%.",
+      "Mitigated vehicular cybersecurity exposure using anomaly detection pipelines (Scikit-learn), CAN telemetry streaming, and statistical modeling to overcome intrusion blind spots, improving system resilience efficiency by 40%.",
+      "Constructed CAN-bus ECU validation testbench using embedded C, protocol timing analysis, and deterministic simulation frameworks to overcome message sequencing inconsistencies, improving validation efficiency by 23%.",
+      "Strengthened signal-level observability using real-time data visualization dashboards and telemetry analytics to overcome diagnostic blind spots, improving tuning efficiency by 43%.",
+      "Engineered real-time CAN telemetry visualization using D3.js, frequency-domain analysis, and attack-simulation modeling to overcome ambiguity in differentiating normal vs anomalous message states, improving cybersecurity detection efficiency by 38%.",
+      "Standardized version control discipline using Git branching strategies and CI validation checks to overcome deployment inconsistencies, improving release reliability efficiency by 15%."
+    ]},
+    {role:"Frontend Developer", company:"Crystalvoxx Ltd.", loc:"Gujarat, India", date:"Aug 2021 – Aug 2022", points:[
+      "Modernized legacy healthcare platform workflows using React, Node.js, REST APIs, and secure coding practices to overcome high-load bottlenecks, improving application performance by 25%.",
+      "Institutionalized reusable UI architecture using component libraries, MVC design patterns, and JavaScript optimization to overcome redundant development cycles, improving build efficiency by 40%.",
+      "Enhanced production stability using Git workflows, regression testing, frontend profiling, and defect triage to overcome post-release instability, improving defect containment by 20%."
+    ]},
+    {role:"Web Developer", company:"LJ Design Center", loc:"Gujarat, India", date:"July 2020 – Aug 2021", points:[
+      "Engineered real-time hackathon platform workflows using React, Node.js, SQL integration, REST APIs, and role-based access control to overcome fragmented submission processes, improving evaluation efficiency by 30%.",
+      "Optimized nonprofit operational reporting using REST APIs, automated data pipelines, and relational query optimization to overcome administrative bottlenecks, improving reporting efficiency by 40%.",
+      "Reinforced release governance using Git, CI/CD automation, and regression testing protocols to overcome post-deployment defects, improving release stability by 20%."
+    ]}
   ],
   projects:[
     {t:"Multi-Lingual Text Summarizer",m:"+30%",d:"Engineered multilingual transformer-based summarization pipeline using HuggingFace T5, PyTorch, tokenizer optimization, and sequence-complexity tuning to overcome semantic degradation and inference latency constraints, improving summarization efficiency by 30%."},
@@ -298,31 +181,18 @@ const RESUME_DATA = {
     {t:"Stock Market Prediction System",m:"+20%",d:"Developed hybrid CNN-LSTM forecasting model using TensorFlow, sentiment-integrated NLP preprocessing, and time-series optimization to overcome volatile financial signal noise, improving prediction efficiency by 20%."},
     {t:"Cloud-Based Attendance Portal",m:"+95%",d:"Deployed scalable facial-recognition attendance system using GCP, OpenCV, Firebase, REST APIs, and fault-tolerant backend synchronization to overcome manual logging inefficiencies and concurrency bottlenecks, improving identification efficiency by 95%."},
     {t:"Context Derivation for Knowledge Graph",m:"+35%",d:"Synthesized NLP-driven knowledge graph pipeline using spaCy, BERT, GPT-2, entity extraction, and relationship mapping algorithms to overcome unstructured contextual ambiguity, improving information retrieval efficiency by 35%."},
-    {t:"CultVerse – Social Commerce",m:"+25%",d:"Built event-driven social commerce platform using React, Firebase, collaborative filtering algorithms, and real-time analytics to overcome fragmented franchise engagement workflows, improving conversion efficiency by 25%."},
+    {t:"CultVerse – Real-Time Social Commerce Platform",m:"+25%",d:"Built event-driven social commerce platform using React, Firebase, collaborative filtering algorithms, and real-time analytics to overcome fragmented franchise engagement workflows, improving conversion efficiency by 25%."},
     {t:"IoT Home Security System",m:"+30%",d:"Implemented embedded IoT intrusion detection system using Raspberry Pi, PIR sensors, Python automation, and cloud-synchronized alert dashboards to overcome delayed threat recognition, improving incident response efficiency by 30%."},
     {t:"Realtime Fire Detection System",m:"+70%",d:"Engineered computer vision detection pipeline using YOLOv3, OpenCV, smoke-density modeling, and edge inference optimization to overcome high false-positive deployment constraints, improving detection efficiency by 70%."},
-    Here's the rest of the code, continuing exactly from where it cut off (the `projects` array in `RESUME_DATA`):
-
-```html
-    {t:"Arthur AI – NLP Virtual Assistant",m:"+28%",d:"Formulated modular conversational AI framework using Python-based intent classification, dialogue state management, and rule-based reasoning to overcome multi-intent ambiguity prior to LLM APIs, improving interaction efficiency by 28%."},
+    {t:"Arthur AI – Early NLP Virtual Assistant",m:"+28%",d:"Formulated modular conversational AI framework using Python-based intent classification, dialogue state management, and rule-based reasoning to overcome multi-intent ambiguity prior to LLM APIs, improving interaction efficiency by 28%."},
     {t:"Automated Plant Watering System",m:"+25%",d:"Devised sensor-driven irrigation automation system using Arduino, embedded C, threshold algorithms, and interrupt-based control logic to overcome manual watering inefficiencies, improving resource utilization efficiency by 25%."}
   ],
   publications:[
     {t:"DeepCANvas – Neural System for Vehicle CAN Data Anomaly Detection", note:"Selected in peer review for IEEE IAVVC Germany"}
   ],
   education:[
-    {
-      deg:"MSE — Computer Engineering",
-      school:"University of Michigan – Dearborn, MI",
-      date:"May 2024",
-      course:"Embedded Systems, Computer Architecture, Advanced Software Techniques, Intelligent Systems, Artificial Intelligence, Cloud Computing, NLP, Pattern Recognition, Web Development, Auto Sensors & Actuators"
-    },
-    {
-      deg:"BE — Computer Engineering",
-      school:"Gujarat Technological University – Gujarat, India",
-      date:"July 2021",
-      course:"Data Structures, Algorithms, Object-Oriented Programming, Digital Electronics"
-    }
+    {deg:"MSE — Computer Engineering", school:"University of Michigan – Dearborn, MI", date:"May 2024", course:"Embedded Systems, Computer Architecture, Advanced Software Techniques, Intelligent Systems, Artificial Intelligence, Cloud Computing, NLP, Pattern Recognition, Web Development, Auto Sensors & Actuators"},
+        {deg:"BE — Computer Engineering", school:"Gujarat Technological University – Gujarat, India", date:"July 2021", course:"Data Structures, Algorithms, Object-Oriented Programming, Digital Electronics"}
   ],
   skills:[
     {cat:"Programming & Systems", items:"Python, Java, C/C++, C#, JavaScript/TypeScript, SQL, Bash"},
@@ -335,8 +205,8 @@ const RESUME_DATA = {
     {cat:"Engineering Practices", items:"Microservices, Distributed Systems, Data Structures & Algorithms, System Design, RCA"},
     {cat:"Web & CMS Development", items:"HTML, CSS, Bootstrap, Responsive Design, WordPress, Drupal"}
   ],
-  extraSkills:[
-    "Algorithm","Time Complexity","Space Complexity","Unit Testing","Integration Testing","System Testing","UAT","Performance Testing","Load Testing","Stress Testing","Security Testing","Penetration Testing","Regression Testing","Smoke Testing","Sanity Testing","Black-Box Testing","White-Box Testing","Test Automation","Selenium","Cypress","Playwright","Appium","JMeter","LoadRunner","SoapUI","Postman","Problem-Solving","Critical Thinking","Teamwork","Leadership","Communication","Collaboration","Adaptability","Time Management","Mentorship","Agile Mindset","Conflict Resolution","Negotiation","Presentation Skills","Stakeholder Management","Payment Gateways","Stripe","PayPal","Square","Quantitative Analysis","Data Engineering","Cloud Infrastructure","Jenkins","Troubleshooting","Continuous Development","Debugging","Continuous Improvement","Web Accessibility","UX Design Principles","Typography","Performance","Mockups","jQuery","Industry Trends","Graphic Design","Dreamweaver","Content Management","Bootstrap","Attention to Detail","Advising Clients","Adobe Photoshop","Acquisition"]
+  extraSkills:["Algorithm","Time Complexity","Space Complexity","Unit Testing","Integration Testing","System Testing","UAT","Performance Testing","Load Testing","Stress Testing","Security Testing","Penetration Testing","Regression Testing","Smoke Testing","Sanity Testing","Black-Box Testing","White-Box Testing","Test Automation","Selenium","Cypress","Playwright","Appium","JMeter","LoadRunner","SoapUI","Postman","Problem-Solving","Critical Thinking","Teamwork","Leadership","Communication","Collaboration","Adaptability","Time Management","Mentorship","Agile Mindset","Conflict Resolution","Negotiation","Presentation Skills","Stakeholder Management","Payment Gateways","Stripe","PayPal","Square","Quantitative Analysis"],
+  projKeywords:["Data Engineering","Cloud Infrastructure","Jenkins","Troubleshooting","Continuous Development","Debugging","Continuous Improvement","Written Communication","Web Accessibility","Verbal Communication Skills","UX Design Principles","Typography","Performance","Mockups","Legal","jQuery","Industry Trends","Growth","Graphic Design","Dreamweaver","Content Management","Bootstrap","Attention to Detail","Advising Clients","Adobe Photoshop","Acquisition"]
 };
 </script>
 
@@ -346,322 +216,112 @@ const $ = (s,r=document)=>r.querySelector(s);
 const el=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
 
 /* STATS */
-(function(){
-  const g=$("#statsGrid");
-  RESUME_DATA.stats.forEach(s=>{
-    const c=el("div","glass p-6 reveal text-center");
-    c.innerHTML=`<div class="mono text-3xl sm:text-4xl text-white">${s.v}</div>
-      <div class="mono text-[10px] text-[var(--muted)] mt-2 tracking-widest">${s.l}</div>`;
-    g.appendChild(c);
-  });
-})();
+(function(){const g=$("#statsGrid");RESUME_DATA.stats.forEach(s=>{const c=el("div","glass p-6 reveal text-center");c.innerHTML=`<div class="mono text-3xl sm:text-4xl text-white">${s.v}</div><div class="mono text-[10px] text-[var(--muted)] mt-2 tracking-widest">${s.l}</div>`;g.appendChild(c);});})();
 
 /* TIMELINE */
-(function(){
-  const t=$("#timeline");
-  RESUME_DATA.experience.forEach((x,i)=>{
-    const wrap=el("div","relative mb-6 reveal");
-    const pts=x.points.map(p=>`<li class="flex gap-3 text-sm text-[var(--muted)] leading-relaxed">
-        <span class="text-[#0a84ff] mt-1">▹</span><span>${p}</span></li>`).join("");
-    wrap.innerHTML=`
-      <div class="tl-dot"></div>
-      <div class="glass p-6 card cursor-pointer">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <h3 class="text-xl text-white">${x.role}</h3>
-            <p class="text-[var(--accent)] text-sm font-medium">${x.company} <span class="text-[var(--muted)]">• ${x.loc}</span></p>
-          </div>
-          <div class="flex items-center gap-3 shrink-0">
-            <span class="mono text-[11px] text-[var(--muted)] hidden sm:inline">${x.date}</span>
-            <i data-lucide="chevron-down" class="chev w-5 h-5 text-[var(--muted)]"></i>
-          </div>
-        </div>
-        <p class="mono text-[11px] text-[var(--muted)] sm:hidden mt-2">${x.date}</p>
-        <div class="card-body"><ul class="space-y-3 mt-5 pt-5 border-t border-[var(--border)]">${pts}</ul></div>
-      </div>`;
-    t.appendChild(wrap);
-  });
-  t.addEventListener("click",e=>{
-    const card=e.target.closest(".card");
-    if(card)card.classList.toggle("open");
-  });
-})();
+(function(){const t=$("#timeline");RESUME_DATA.experience.forEach(x=>{const wrap=el("div","relative mb-6 reveal");const pts=x.points.map(p=>`<li class="flex gap-3 text-sm text-[var(--muted)] leading-relaxed"><span class="text-[#0a84ff] mt-1">▹</span><span>${p}</span></li>`).join("");wrap.innerHTML=`<div class="tl-dot"></div><div class="glass p-6 card cursor-pointer"><div class="flex items-start justify-between gap-4"><div><h3 class="text-xl text-white">${x.role}</h3><p class="text-[var(--accent)] text-sm font-medium">${x.company} <span class="text-[var(--muted)]">• ${x.loc}</span></p></div><div class="flex items-center gap-3 shrink-0"><span class="mono text-[11px] text-[var(--muted)] hidden sm:inline">${x.date}</span><i data-lucide="chevron-down" class="chev w-5 h-5 text-[var(--muted)]"></i></div></div><p class="mono text-[11px] text-[var(--muted)] sm:hidden mt-2">${x.date}</p><div class="card-body"><ul class="space-y-3 mt-5 pt-5 border-t border-[var(--border)]">${pts}</ul></div></div>`;t.appendChild(wrap);});t.addEventListener("click",e=>{const card=e.target.closest(".card");if(card)card.classList.toggle("open");});})();
 
 /* PROJECTS */
-(function(){
-  const g=$("#projectGrid");
-  RESUME_DATA.projects.forEach((p,i)=>{
-    const span = (i%5===0)?"sm:col-span-2":"";
-    const c=el("div",`glass p-6 card cursor-pointer reveal ${span}`);
-    c.innerHTML=`
-      <div class="flex items-start justify-between">
-        <i data-lucide="cpu" class="w-5 h-5 text-[#0a84ff]"></i>
-        <span class="mono text-sm text-[#a1ffb0]">${p.m}</span>
-      </div>
-      <h3 class="text-lg text-white mt-4 leading-snug">${p.t}</h3>
-      <div class="card-body"><p class="text-sm text-[var(--muted)] mt-3 pt-3 border-t border-[var(--border)] leading-relaxed">${p.d}</p></div>
-      <div class="mono text-[10px] text-[var(--muted)] mt-4 flex items-center gap-1">
-        <span class="chev">▾</span> EXPAND DETAILS
-      </div>`;
-    g.appendChild(c);
-  });
-  g.addEventListener("click",e=>{
-    const card=e.target.closest(".card");
-    if(card)card.classList.toggle("open");
-  });
-})();
+(function(){const g=$("#projectGrid");RESUME_DATA.projects.forEach((p,i)=>{const span=(i%5===0)?"sm:col-span-2":"";const c=el("div",`glass p-6 card cursor-pointer reveal ${span}`);c.innerHTML=`<div class="flex items-start justify-between"><i data-lucide="cpu" class="w-5 h-5 text-[#0a84ff]"></i><span class="mono text-sm text-[#a1ffb0]">${p.m}</span></div><h3 class="text-lg text-white mt-4 leading-snug">${p.t}</h3><div class="card-body"><p class="text-sm text-[var(--muted)] mt-3 pt-3 border-t border-[var(--border)] leading-relaxed">${p.d}</p></div><div class="mono text-[10px] text-[var(--muted)] mt-4 flex items-center gap-1"><span class="chev">▾</span> EXPAND DETAILS</div>`;g.appendChild(c);});g.addEventListener("click",e=>{const card=e.target.closest(".card");if(card)card.classList.toggle("open");});})();
 
 /* PUBLICATIONS */
-(function(){
-  const g=$("#pubs");
-  RESUME_DATA.publications.forEach(p=>{
-    const c=el("div","glass p-6 reveal flex items-start gap-4");
-    c.innerHTML=`<i data-lucide="file-badge" class="w-6 h-6 text-[#0a84ff] shrink-0"></i>
-      <div><h3 class="text-lg text-white">${p.t}</h3>
-      <p class="mono text-xs text-[#a1ffb0] mt-2">${p.note}</p></div>`;
-    g.appendChild(c);
-  });
-})();
+(function(){const g=$("#pubs");RESUME_DATA.publications.forEach(p=>{const c=el("div","glass p-6 reveal flex items-start gap-4");c.innerHTML=`<i data-lucide="file-badge" class="w-6 h-6 text-[#0a84ff] shrink-0"></i><div><h3 class="text-lg text-white">${p.t}</h3><p class="mono text-xs text-[#a1ffb0] mt-2">${p.note}</p></div>`;g.appendChild(c);});})();
 
 /* EDUCATION */
-(function(){
-  const g=$("#eduGrid");
-  RESUME_DATA.education.forEach(e2=>{
-    const c=el("div","glass p-6 reveal");
-    c.innerHTML=`<div class="flex items-center justify-between">
-        <i data-lucide="graduation-cap" class="w-6 h-6 text-[#0a84ff]"></i>
-        <span class="mono text-xs text-[var(--muted)]">${e2.date}</span>
-      </div>
-      <h3 class="text-lg text-white mt-4">${e2.deg}</h3>
-      <p class="text-[var(--accent)] text-sm">${e2.school}</p>
-      <p class="text-xs text-[var(--muted)] mt-4 leading-relaxed"><span class="mono text-[10px]">RELEVANT COURSEWORK //</span> ${e2.course}</p>`;
-    g.appendChild(c);
-  });
-})();
+(function(){const g=$("#eduGrid");RESUME_DATA.education.forEach(e2=>{const c=el("div","glass p-6 reveal");c.innerHTML=`<div class="flex items-center justify-between"><i data-lucide="graduation-cap" class="w-6 h-6 text-[#0a84ff]"></i><span class="mono text-xs text-[var(--muted)]">${e2.date}</span></div><h3 class="text-lg text-white mt-4">${e2.deg}</h3><p class="text-[var(--accent)] text-sm">${e2.school}</p><p class="text-xs text-[var(--muted)] mt-4 leading-relaxed"><span class="mono text-[10px]">RELEVANT COURSEWORK //</span> ${e2.course}</p>`;g.appendChild(c);});})();
 
 /* SKILLS */
-(function(){
-  const g=$("#skillsGrid");
-  RESUME_DATA.skills.forEach(s=>{
-    const tags=s.items.split(",").map(i=>`<span class="tag">${i.trim()}</span>`).join("");
-    const c=el("div","glass p-6 reveal");
-    c.innerHTML=`<h3 class="mono text-xs text-[#0a84ff] mb-4">${s.cat}</h3>
-      <div class="flex flex-wrap gap-2">${tags}</div>`;
-    g.appendChild(c);
-  });
-  const ex=$("#extraSkills");
-  RESUME_DATA.extraSkills.forEach(s=>ex.appendChild(el("span","tag",s)));
-})();
+(function(){const g=$("#skillsGrid");RESUME_DATA.skills.forEach(s=>{const tags=s.items.split(",").map(i=>`<span class="tag">${i.trim()}</span>`).join("");const c=el("div","glass p-6 reveal");c.innerHTML=`<h3 class="mono text-xs text-[#0a84ff] mb-4">${s.cat}</h3><div class="flex flex-wrap gap-2">${tags}</div>`;g.appendChild(c);});const ex=$("#extraSkills");RESUME_DATA.extraSkills.forEach(s=>ex.appendChild(el("span","tag",s)));const pk=$("#projKeywords");RESUME_DATA.projKeywords.forEach(s=>pk.appendChild(el("span","tag",s)));})();
 
 lucide.createIcons();
 </script>
 
-<!-- ============ LENIS (smooth scroll) ============ -->
+<!-- ============ LIBRARIES ============ -->
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-
-<!-- ============ GSAP ============ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-<!-- ============ THREE.JS ============ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <!-- ============ MAIN LOGIC ============ -->
 <script>
 const isMobile = window.matchMedia("(max-width:768px)").matches || !(()=>{try{const c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}})();
 
-/* ---------- LENIS ---------- */
-const lenis = new Lenis({
-  duration: 1.6,
-  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true,
-  wheelMultiplier: 0.9,
-  lerp: 0.08
-});
-function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+const lenis = new Lenis({duration:1.6,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true,wheelMultiplier:0.9,lerp:0.08});
+function raf(time){lenis.raf(time);requestAnimationFrame(raf);}
 requestAnimationFrame(raf);
 
-/* GSAP <-> Lenis bridge */
 gsap.registerPlugin(ScrollTrigger);
-lenis.on("scroll", ScrollTrigger.update);
-gsap.ticker.add(t => lenis.raf(t*1000));
+lenis.on("scroll",ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
 gsap.ticker.lagSmoothing(0);
 
-/* ---------- HUD ---------- */
-const scrollFill=$("#scrollFill"), scrollPct=$("#scrollPct"), packetsEl=$("#packets"), fpsEl=$("#fps");
+const scrollFill=$("#scrollFill"),scrollPct=$("#scrollPct"),packetsEl=$("#packets"),fpsEl=$("#fps");
 let packets=0;
-lenis.on("scroll",({progress})=>{
-  const p=Math.round((progress||0)*100);
-  scrollFill.style.width=p+"%";
-  scrollPct.textContent=p+"%";
-  packets=Math.floor((progress||0)*1048576);
-  packetsEl.textContent=packets.toLocaleString();
-});
+lenis.on("scroll",({progress})=>{const p=Math.round((progress||0)*100);scrollFill.style.width=p+"%";scrollPct.textContent=p+"%";packets=Math.floor((progress||0)*1048576);packetsEl.textContent=packets.toLocaleString();});
 
-/* ---------- REVEAL OBSERVER ---------- */
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
-},{threshold:0.12});
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:0.12});
 document.querySelectorAll(".reveal").forEach(r=>io.observe(r));
 
-/* ---------- TERMINAL ---------- */
-const term=$("#terminal"), termOut=$("#termOut"), termIn=$("#termIn");
+/* TERMINAL */
+const term=$("#terminal"),termOut=$("#termOut"),termIn=$("#termIn");
 const banner=`HAARD_OS v2.5 // Neural Resume Interface\nType 'help' for available commands.\n`;
-function termPrint(s){ termOut.textContent += "\n"+s+"\n"; termOut.scrollTop=termOut.scrollHeight; }
-function openTerm(){ term.classList.add("on"); if(!termOut.textContent) termOut.textContent=banner; termIn.focus(); }
-function closeTerm(){ term.classList.remove("on"); }
+function termPrint(s){termOut.textContent+="\n"+s+"\n";termOut.scrollTop=termOut.scrollHeight;}
+function openTerm(){term.classList.add("on");if(!termOut.textContent)termOut.textContent=banner;termIn.focus();}
+function closeTerm(){term.classList.remove("on");}
 $("#termBtn").addEventListener("click",openTerm);
 $("#termClose").addEventListener("click",closeTerm);
-document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeTerm(); });
-
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeTerm();});
+function scrollToSel(sel){const t=$(sel);if(t){closeTerm();lenis.scrollTo(t,{offset:-80});}}
 const COMMANDS={
-  help:()=>`Available commands:
-  about      - profile summary
-  experience - work history
-  projects   - project portfolio
-  skills     - technical arsenal
-  education  - academic record
-  publications - research
-  contact    - reach out
-  clear      - clear screen`,
-  about:()=>`Haard Rao — Software Engineer.
-Embedded Systems × AI × Web. 5+ years.
-MSE Computer Engineering (UMich-Dearborn).`,
-  experience:()=>RESUME_DATA.experience.map(x=>`> ${x.role} @ ${x.company} (${x.date})`).join("\n"),
-  projects:()=>{ scrollToSel("#projectGrid"); return RESUME_DATA.projects.map(p=>`> ${p.t}  [${p.m}]`).join("\n"); },
-  skills:()=>RESUME_DATA.skills.map(s=>`> ${s.cat}: ${s.items}`).join("\n"),
-  education:()=>RESUME_DATA.education.map(e=>`> ${e.deg} — ${e.school} (${e.date})`).join("\n"),
-  publications:()=>RESUME_DATA.publications.map(p=>`> ${p.t}\n  ${p.note}`).join("\n"),
+  help:()=>`Available commands:\n  about | experience | projects | skills\n  education | publications | contact | clear`,
+  about:()=>`Haard Rao — Software Engineer.\nEmbedded Systems × AI × Web. 5+ years.\nMSE Computer Engineering (UMich-Dearborn).`,
+  experience:()=>{scrollToSel("#timeline");return RESUME_DATA.experience.map(x=>`> ${x.role} @ ${x.company} (${x.date})`).join("\n");},
+  projects:()=>{scrollToSel("#projectGrid");return RESUME_DATA.projects.map(p=>`> ${p.t}  [${p.m}]`).join("\n");},
+  skills:()=>{scrollToSel("#skillsGrid");return RESUME_DATA.skills.map(s=>`> ${s.cat}: ${s.items}`).join("\n");},
+  education:()=>{scrollToSel("#eduGrid");return RESUME_DATA.education.map(e=>`> ${e.deg} — ${e.school} (${e.date})`).join("\n");},
+  publications:()=>{scrollToSel("#pubs");return RESUME_DATA.publications.map(p=>`> ${p.t}\n  ${p.note}`).join("\n");},
   contact:()=>`Email: ${RESUME_DATA.profile.email}\nPhone: ${RESUME_DATA.profile.phone}`,
-  clear:()=>{ termOut.textContent=banner; return ""; }
+  clear:()=>{termOut.textContent=banner;return "";}
 };
-function scrollToSel(sel){ const t=$(sel); if(t){ closeTerm(); lenis.scrollTo(t,{offset:-80}); } }
-termIn.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    const cmd=termIn.value.trim().toLowerCase();
-    termOut.textContent += `\n> ${cmd}`;
-    if(cmd in COMMANDS){ const out=COMMANDS[cmd](); if(out) termPrint(out); }
-    else if(cmd) termPrint(`command not found: ${cmd}. Type 'help'.`);
-    termIn.value="";
-    termOut.scrollTop=termOut.scrollHeight;
-  }
-});
+termIn.addEventListener("keydown",e=>{if(e.key==="Enter"){const cmd=termIn.value.trim().toLowerCase();termOut.textContent+=`\n> ${cmd}`;if(cmd in COMMANDS){const out=COMMANDS[cmd]();if(out)termPrint(out);}else if(cmd)termPrint(`command not found: ${cmd}. Type 'help'.`);termIn.value="";termOut.scrollTop=termOut.scrollHeight;}});
+document.addEventListener("keydown",e=>{if(e.key.toLowerCase()==="t"&&!term.classList.contains("on")&&document.activeElement.tagName!=="INPUT"){e.preventDefault();openTerm();}});
 
 /* ================= THREE.JS NEURAL CORE ================= */
-let renderer, scene, camera, core, ring, ringPts, raysGroup;
-const mouse={x:0,y:0}, target={x:0,y:0};
-
+let renderer,scene,camera,core,ring;
+const mouse={x:0,y:0},target={x:0,y:0};
 function initThree(){
   const canvas=$("#webgl");
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:"high-performance"});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
   renderer.setSize(innerWidth,innerHeight);
-
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,0.1,100);
   camera.position.z=6;
-
-  /* --- Fresnel core (icosahedron) --- */
   const geo=new THREE.IcosahedronGeometry(1.5,4);
   const mat=new THREE.ShaderMaterial({
-    uniforms:{
-      uTime:{value:0},
-      uMouse:{value:new THREE.Vector2(0,0)},
-      uColorA:{value:new THREE.Color(0x0a84ff)},
-      uColorB:{value:new THREE.Color(0x64d2ff)}
-    },
-    vertexShader:`
-      uniform float uTime;
-      uniform vec2 uMouse;
-      varying vec3 vNormal;
-      varying vec3 vView;
-      // simple noise
-      float hash(vec3 p){p=fract(p*0.3183099+0.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
-      void main(){
-        vNormal=normalize(normalMatrix*normal);
-        float disp=sin(position.x*3.0+uTime)*0.04+sin(position.y*4.0+uTime*1.3)*0.04;
-        vec3 pos=position+normal*disp;
-        vec4 mv=modelViewMatrix*vec4(pos,1.0);
-        vView=normalize(-mv.xyz);
-        gl_Position=projectionMatrix*mv;
-      }`,
-    fragmentShader:`
-      uniform vec3 uColorA;
-      uniform vec3 uColorB;
-      uniform float uTime;
-      varying vec3 vNormal;
-      varying vec3 vView;
-      void main(){
-        float fres=pow(1.0-max(dot(vNormal,vView),0.0),2.5);
-        vec3 col=mix(uColorA,uColorB,fres);
-        float pulse=0.6+0.4*sin(uTime*1.5);
-        gl_FragColor=vec4(col*fres*pulse, fres*0.9+0.05);
-      }`,
-    transparent:true,
-    blending:THREE.AdditiveBlending,
-    depthWrite:false
+    uniforms:{uTime:{value:0},uMouse:{value:new THREE.Vector2(0,0)},uColorA:{value:new THREE.Color(0x0a84ff)},uColorB:{value:new THREE.Color(0x64d2ff)}},
+    vertexShader:`uniform float uTime;varying vec3 vNormal;varying vec3 vView;void main(){vNormal=normalize(normalMatrix*normal);float disp=sin(position.x*3.0+uTime)*0.04+sin(position.y*4.0+uTime*1.3)*0.04;vec3 pos=position+normal*disp;vec4 mv=modelViewMatrix*vec4(pos,1.0);vView=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
+    fragmentShader:`uniform vec3 uColorA;uniform vec3 uColorB;uniform float uTime;varying vec3 vNormal;varying vec3 vView;void main(){float fres=pow(1.0-max(dot(vNormal,vView),0.0),2.5);vec3 col=mix(uColorA,uColorB,fres);float pulse=0.6+0.4*sin(uTime*1.5);gl_FragColor=vec4(col*fres*pulse,fres*0.9+0.05);}`,
+    transparent:true,blending:THREE.AdditiveBlending,depthWrite:false
   });
-  core=new THREE.Mesh(geo,mat);
-  scene.add(core);
-
-  /* inner wireframe */
-  const wire=new THREE.Mesh(
-    new THREE.IcosahedronGeometry(1.05,1),
-    new THREE.MeshBasicMaterial({color:0x0a84ff,wireframe:true,transparent:true,opacity:0.15})
-  );
+  core=new THREE.Mesh(geo,mat);scene.add(core);
+  const wire=new THREE.Mesh(new THREE.IcosahedronGeometry(1.05,1),new THREE.MeshBasicMaterial({color:0x0a84ff,wireframe:true,transparent:true,opacity:0.15}));
   core.add(wire);
-
-  /* --- Data Ring (CAN-bus / AI weights) --- */
-  ringPts=new THREE.Group();
-  const N=260;
-  const ringGeo=new THREE.BufferGeometry();
-  const pos=new Float32Array(N*3);
-  for(let i=0;i<N;i++){
-    const a=(i/N)*Math.PI*2;
-    const r=3.0+Math.random()*0.25;
-    pos[i*3]=Math.cos(a)*r;
-    pos[i*3+1]=(Math.random()-0.5)*0.3;
-    pos[i*3+2]=Math.sin(a)*r;
-  }
+  const N=260,ringGeo=new THREE.BufferGeometry(),pos=new Float32Array(N*3);
+  for(let i=0;i<N;i++){const a=(i/N)*Math.PI*2,r=3.0+Math.random()*0.25;pos[i*3]=Math.cos(a)*r;pos[i*3+1]=(Math.random()-0.5)*0.3;pos[i*3+2]=Math.sin(a)*r;}
   ringGeo.setAttribute("position",new THREE.BufferAttribute(pos,3));
-  ring=new THREE.Points(ringGeo,new THREE.PointsMaterial({
-    color:0x64d2ff,size:0.04,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false
-  }));
-  ring.rotation.x=0.5;
-  scene.add(ring);
-
-  /* second ring */
-  const ring2=ring.clone();
-  ring2.rotation.x=-0.6; ring2.rotation.z=0.4; ring2.scale.setScalar(1.25);
-  scene.add(ring2);
-  window._ring2=ring2;
-
-  /* ambient field particles */
-  const fGeo=new THREE.BufferGeometry();
-  const FN=400, fp=new Float32Array(FN*3);
-  for(let i=0;i<FN;i++){ fp[i*3]=(Math.random()-0.5)*30; fp[i*3+1]=(Math.random()-0.5)*30; fp[i*3+2]=(Math.random()-0.5)*30; }
+  ring=new THREE.Points(ringGeo,new THREE.PointsMaterial({color:0x64d2ff,size:0.04,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false}));
+  ring.rotation.x=0.5;scene.add(ring);
+  const ring2=ring.clone();ring2.rotation.x=-0.6;ring2.rotation.z=0.4;ring2.scale.setScalar(1.25);scene.add(ring2);window._ring2=ring2;
+  const FN=400,fGeo=new THREE.BufferGeometry(),fp=new Float32Array(FN*3);
+  for(let i=0;i<FN;i++){fp[i*3]=(Math.random()-0.5)*30;fp[i*3+1]=(Math.random()-0.5)*30;fp[i*3+2]=(Math.random()-0.5)*30;}
   fGeo.setAttribute("position",new THREE.BufferAttribute(fp,3));
-  const field=new THREE.Points(fGeo,new THREE.PointsMaterial({color:0x444444,size:0.03,transparent:true,opacity:0.5}));
-  scene.add(field);
-  window._field=field;
-
-  window.addEventListener("mousemove",e=>{
-    target.x=(e.clientX/innerWidth-0.5)*2;
-    target.y=(e.clientY/innerHeight-0.5)*2;
-  });
+  window._field=new THREE.Points(fGeo,new THREE.PointsMaterial({color:0x444444,size:0.03,transparent:true,opacity:0.5}));scene.add(window._field);
+  window.addEventListener("mousemove",e=>{target.x=(e.clientX/innerWidth-0.5)*2;target.y=(e.clientY/innerHeight-0.5)*2;});
   window.addEventListener("resize",onResize);
-
   setupScrollScrub();
 }
-
-function onResize(){
-  if(!renderer)return;
-  camera.aspect=innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
-}
-
-/* ---- Scroll scrubbing: disassemble core ---- */
+function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
 function setupScrollScrub(){
   gsap.to(core.scale,{x:0.55,y:0.55,z:0.55,scrollTrigger:{trigger:"#content",start:"top top",end:"bottom bottom",scrub:1}});
   gsap.to(core.position,{x:2.2,scrollTrigger:{trigger:"#content",start:"top top",end:"40% bottom",scrub:1}});
@@ -669,105 +329,38 @@ function setupScrollScrub(){
   gsap.to(window._ring2.position,{x:2.5,y:-1.2,scrollTrigger:{trigger:"#content",start:"30% top",end:"90% bottom",scrub:1}});
   gsap.to(camera.position,{z:9,scrollTrigger:{trigger:"#content",start:"top top",end:"bottom bottom",scrub:1.2}});
 }
-
-/* ---- Throttled render loop ---- */
-let last=0, frames=0, fpsLast=performance.now(), running=true;
-const FPS_CAP=60, FRAME_MS=1000/FPS_CAP;
-
+let last=0,frames=0,fpsLast=performance.now(),running=true;
+const FRAME_MS=1000/60;
 function animate(now){
   requestAnimationFrame(animate);
-  if(!running) return;
-
-  // throttle to FPS cap
-  const delta = now - last;
-  if(delta < FRAME_MS) return;
-  last = now - (delta % FRAME_MS);
-
-  // FPS counter
+  if(!running)return;
+  const delta=now-last;
+  if(delta<FRAME_MS)return;
+  last=now-(delta%FRAME_MS);
   frames++;
-  if(now - fpsLast >= 1000){
-    fpsEl.textContent = frames;
-    frames = 0;
-    fpsLast = now;
-  }
-
-  const t = now * 0.001;
-
-  // smooth mouse easing
-  mouse.x += (target.x - mouse.x) * 0.05;
-  mouse.y += (target.y - mouse.y) * 0.05;
-
-  if(core){
-    core.material.uniforms.uTime.value = t;
-    core.material.uniforms.uMouse.value.set(mouse.x, mouse.y);
-    core.rotation.y += 0.0025;
-    core.rotation.x += 0.0012;
-    // mouse parallax tilt
-    core.rotation.y += mouse.x * 0.01;
-    core.rotation.x += mouse.y * 0.01;
-  }
-  if(ring){ ring.rotation.y += 0.003; ring.rotation.z += 0.0008; }
-  if(window._ring2){ window._ring2.rotation.y -= 0.004; window._ring2.rotation.x += 0.0006; }
-  if(window._field){ window._field.rotation.y += 0.0004; }
-
-  // subtle camera parallax
-  camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.03;
-  camera.position.y += (-mouse.y * 0.5 - camera.position.y) * 0.03;
+  if(now-fpsLast>=1000){fpsEl.textContent=frames;frames=0;fpsLast=now;}
+  const t=now*0.001;
+  mouse.x+=(target.x-mouse.x)*0.05;mouse.y+=(target.y-mouse.y)*0.05;
+  if(core){core.material.uniforms.uTime.value=t;core.material.uniforms.uMouse.value.set(mouse.x,mouse.y);core.rotation.y+=0.0025+mouse.x*0.01;core.rotation.x+=0.0012+mouse.y*0.01;}
+  if(ring){ring.rotation.y+=0.003;ring.rotation.z+=0.0008;}
+  if(window._ring2){window._ring2.rotation.y-=0.004;window._ring2.rotation.x+=0.0006;}
+  if(window._field){window._field.rotation.y+=0.0004;}
+  camera.position.x+=(mouse.x*0.5-camera.position.x)*0.03;
+  camera.position.y+=(-mouse.y*0.5-camera.position.y)*0.03;
   camera.lookAt(0,0,0);
-
-  renderer.render(scene, camera);
+  renderer.render(scene,camera);
 }
+document.addEventListener("visibilitychange",()=>{running=!document.hidden;});
 
-/* ---- Pause render when tab hidden (performance) ---- */
-document.addEventListener("visibilitychange",()=>{ running = !document.hidden; });
-
-/* ---- Pause render when canvas off-screen ---- */
-const heroSection = document.querySelector("#content");
-
-/* ================= BOOT ================= */
 if(isMobile){
-  // Mobile / no-WebGL fallback: CSS shader gradient
-  $("#cssfallback").style.display = "block";
-  $("#webgl").style.display = "none";
-  fpsEl.textContent = "—";
-  // still drive ScrollTrigger refresh for reveals
-} else {
-  try{
-    initThree();
-    requestAnimationFrame(animate);
-  }catch(err){
-    console.warn("WebGL init failed, using fallback:", err);
-    $("#cssfallback").style.display = "block";
-    $("#webgl").style.display = "none";
-    fpsEl.textContent = "—";
-  }
+  $("#cssfallback").style.display="block";$("#webgl").style.display="none";fpsEl.textContent="—";
+}else{
+  try{initThree();requestAnimationFrame(animate);}
+  catch(err){console.warn("WebGL failed:",err);$("#cssfallback").style.display="block";$("#webgl").style.display="none";fpsEl.textContent="—";}
 }
-
-/* ---- Refresh ScrollTrigger after everything loads ---- */
-window.addEventListener("load",()=>{ ScrollTrigger.refresh(); });
-
-/* ---- Hero text intro (GSAP) ---- */
-gsap.fromTo(".reveal:first-of-type",
-  {opacity:0,y:30},
-  {opacity:1,y:0,duration:1.4,ease:"power3.out",delay:0.2}
-);
-
-/* ---- Keyboard shortcut: press 'T' to open terminal ---- */
-document.addEventListener("keydown",e=>{
-  if(e.key.toLowerCase()==="t" && !term.classList.contains("on") && document.activeElement.tagName!=="INPUT"){
-    e.preventDefault();
-    openTerm();
-  }
-});
-
-/* ---- Simulated "Data Packets" idle ticker (when not scrolling) ---- */
-setInterval(()=>{
-  if(document.hidden) return;
-  // small organic drift so the HUD always feels "alive"
-  packets += Math.floor(Math.random()*42);
-  packetsEl.textContent = packets.toLocaleString();
-}, 1200);
+window.addEventListener("load",()=>{ScrollTrigger.refresh();});
+gsap.fromTo(".reveal:first-of-type",{opacity:0,y:30},{opacity:1,y:0,duration:1.4,ease:"power3.out",delay:0.2});
+setInterval(()=>{if(document.hidden)return;packets+=Math.floor(Math.random()*42);packetsEl.textContent=packets.toLocaleString();},1200);
 </script>
-
 </body>
 </html>
